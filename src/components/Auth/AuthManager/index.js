@@ -1,9 +1,6 @@
-import React, { useEffect, createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-
-import { getMe } from 'services/auth';
-import { getToken, removeToken } from 'services/auth/token';
 
 import { AuthRouter } from '..';
 
@@ -12,28 +9,27 @@ import routeUrlProvider, { LOGIN, DASHBOARD } from 'constants/route-paths';
 export const AuthManagerContext = createContext({});
 
 const AuthManager = ({ children, history }) => {
-  const token = getToken();
-  const [isLoggedIn, setIsLoggedIn] = useState(token ? true : false);
-  const [info, setInfo] = useState({});
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  // const [info, setInfo] = useState({});
 
-  useEffect(() => {
-    if (token) {
-      getMe()
-        .then(res => {
-          setIsLoggedIn(true);
-          setInfo(res);
-        })
-        .catch(() => {
-          removeToken();
-          setIsLoggedIn(false);
-        });
-    }
-  }, [history, token]);
+  // useEffect(() => {
+  //   if (token) {
+  //     getMe()
+  //       .then(res => {
+  //         setIsLoggedIn(true);
+  //         setInfo(res);
+  //       })
+  //       .catch(() => {
+  //         removeToken();
+  //         setIsLoggedIn(false);
+  //       });
+  //   }
+  // }, [history, token]);
 
   return (
     <AuthManagerContext.Provider
       value={{
-        info,
+        // info,
         isLoggedIn,
         setIsLoggedIn
       }}

@@ -20,9 +20,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import ListIcon from '@material-ui/icons/List';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import ExtensionIcon from '@material-ui/icons/Extension';
+
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import FlareIcon from '@material-ui/icons/Flare';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
@@ -31,14 +29,7 @@ import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import SettingsIcon from '@material-ui/icons/Settings';
 
 import useStyles from './useStyles';
-import {
-  DASHBOARD,
-  USER_LIST,
-  USER_CREATE,
-  PRODUCT_TABLE
-} from 'constants/route-paths';
-
-import Logout from './Logout';
+import { DASHBOARD } from 'constants/route-paths';
 
 const Title = styled(Typography)`
   && {
@@ -157,41 +148,6 @@ const LayoutView = ({
             </ListItemIcon>
             <ListItemText primary="Dashboard" />
           </ListItem>
-          <ListItem
-            button
-            onClick={() => menuLink(USER_CREATE)}
-            selected={menuSelected === USER_CREATE}
-          >
-            <ListItemIcon>
-              <PersonAddIcon />
-            </ListItemIcon>
-            <ListItemText primary="Create user" />
-          </ListItem>
-          <ListItem
-            button
-            onClick={() => menuLink(USER_LIST)}
-            selected={menuSelected === USER_LIST}
-          >
-            <ListItemIcon>
-              <ListIcon />
-            </ListItemIcon>
-            <ListItemText primary="List User" />
-          </ListItem>
-        </List>
-        <Divider />
-        <List>
-          <ListItem
-            button
-            onClick={() => menuLink(PRODUCT_TABLE)}
-            selected={menuSelected === PRODUCT_TABLE}
-          >
-            <ListItemIcon>
-              <ExtensionIcon />
-            </ListItemIcon>
-            <ListItemText primary="Product" />
-          </ListItem>
-
-          <Logout />
         </List>
       </Drawer>
 

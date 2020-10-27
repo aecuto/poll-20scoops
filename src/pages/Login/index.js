@@ -1,18 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTheme } from 'styled-components';
-import { FORM_ERROR } from 'final-form';
+// import { FORM_ERROR } from 'final-form';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import LoginView from './index.view';
 
-import { login } from 'services/auth';
-import { setToken } from 'services/auth/token';
-
 import routeUrlProvider, { DASHBOARD } from 'constants/route-paths';
+import { useContextAuthManager } from 'components/Auth/AuthManager';
 
 const Login = ({ theme, history }) => {
+  const { setIsLoggedIn } = useContextAuthManager();
   const muiTheme = createMuiTheme({
     palette: {
       primary: {
@@ -22,12 +21,8 @@ const Login = ({ theme, history }) => {
   });
 
   const onSubmit = values => {
-    return login(values)
-      .then(res => {
-        setToken(res.token);
-        history.push(routeUrlProvider.getForLink(DASHBOARD));
-      })
-      .catch(error => ({ [FORM_ERROR]: error.message }));
+    setIsLoggedIn(true);
+    history.push(routeUrlProvider.getForLink(DASHBOARD));
   };
 
   const props = {

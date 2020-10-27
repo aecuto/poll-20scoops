@@ -1,6 +1,5 @@
 {
   "extends": ["react-app", "prettier", "plugin:import/errors"],
-  "root": true,
   "parser": "babel-eslint",
   "env": {
     "browser": true,
