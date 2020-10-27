@@ -1,0 +1,12 @@
+{
+  "development": {
+    "REACT_APP_SERVER": "development",
+    "REACT_APP_API_URL": "http://localhost:8000"
+  },
+  "staging": {
+    "REACT_APP_SERVER": "staging"
+  },
+  "production": {
+    "REACT_APP_SERVER": "production"
+  }
+}

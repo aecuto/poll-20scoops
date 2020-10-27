@@ -1,0 +1,27 @@
+name: Install & Check
+on: push
+
+jobs:
+  install-and-check:
+    name: Install and QA checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 1
+
+      - name: Use Node.js
+        uses: actions/setup-node@master
+        with:
+          node-version: 12.x
+
+      - name: Install
+        run: |
+          yarn
+      - name: QA Review
+        run: |
+          yarn test
+          yarn stylelint:check
+          yarn prettier:check
+        env:
+          CI: true
