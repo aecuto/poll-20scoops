@@ -36,10 +36,10 @@ const Login = ({ theme }) => {
       }}
     >
       <CssBaseline />
-      {googleStatus ? (
-        <GoogleRedirect />
-      ) : (
+      {!googleStatus ? (
         <LoginView googleSignIn={googleSignIn} />
+      ) : (
+        <GoogleRedirect />
       )}
     </ThemeProvider>
   );

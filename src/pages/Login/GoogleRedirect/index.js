@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withTheme } from 'styled-components';
 
@@ -25,15 +25,12 @@ const GoogleRedirect = ({ theme }) => {
 
   const { setIsLoggedIn, setError } = useContextAuthManager();
 
-  const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     googleSignInResult();
     removeLocalStorage('googleStatus');
   }, []);
 
   const googleSignInResult = () => {
-    setLoading(true);
     firebase
       .auth()
       .getRedirectResult()
@@ -47,8 +44,7 @@ const GoogleRedirect = ({ theme }) => {
       })
       .catch(error => {
         setError(error.message);
-      })
-      .finally(() => setLoading(false));
+      });
   };
 
   return (
@@ -59,7 +55,7 @@ const GoogleRedirect = ({ theme }) => {
       }}
     >
       <CssBaseline />
-      <Backdrop open={loading} style={{ zIndex: 1 }}>
+      <Backdrop open style={{ zIndex: 1 }}>
         <CircularProgress color="secondary" />
       </Backdrop>
     </ThemeProvider>
