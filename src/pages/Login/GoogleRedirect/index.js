@@ -7,12 +7,14 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+import { removeLocalStorage } from 'utils/localStorage';
+
 import { setToken } from 'services/auth/token';
 import { firebase } from 'services/firebase';
 
 import { useContextAuthManager } from 'components/Auth/AuthManager';
 
-const Login = ({ theme }) => {
+const GoogleRedirect = ({ theme }) => {
   const muiTheme = createMuiTheme({
     palette: {
       primary: {
@@ -27,6 +29,7 @@ const Login = ({ theme }) => {
 
   useEffect(() => {
     googleSignInResult();
+    removeLocalStorage('googleStatus');
   }, []);
 
   const googleSignInResult = () => {
@@ -63,9 +66,9 @@ const Login = ({ theme }) => {
   );
 };
 
-Login.propTypes = {
+GoogleRedirect.propTypes = {
   history: PropTypes.object,
   theme: PropTypes.object
 };
 
-export default withTheme(Login);
+export default withTheme(GoogleRedirect);
