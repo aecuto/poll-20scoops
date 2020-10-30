@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withTheme } from 'styled-components';
-// import { FORM_ERROR } from 'final-form';
+
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import LoginView from './index.view';
 
-import routeUrlProvider, { DASHBOARD } from 'constants/route-paths';
+// import routeUrlProvider, { DASHBOARD } from 'constants/route-paths';
+
+import { setToken } from 'services/auth/token';
+import { firebase, googleProvider } from 'services/firebase';
+
 import { useContextAuthManager } from 'components/Auth/AuthManager';
 
 const Login = ({ theme, history }) => {
-  const { setIsLoggedIn } = useContextAuthManager();
   const muiTheme = createMuiTheme({
     palette: {
       primary: {
@@ -20,13 +23,24 @@ const Login = ({ theme, history }) => {
     }
   });
 
-  const onSubmit = values => {
-    setIsLoggedIn(true);
-    history.push(routeUrlProvider.getForLink(DASHBOARD));
-  };
+  const { setIsLoggedIn, setError } = useContextAuthManager();
 
-  const props = {
-    onSubmit
+  const [loading, setLoading] = useState(false);
+
+  const googleSingIn = () => {
+    setLoading(true);
+    firebase
+      .auth()
+      .signInWithPopup(googleProvider)
+      .then(result => {
+        const { credential } = result;
+        setToken(credential.accessToken);
+        setIsLoggedIn(true);
+      })
+      .catch(error => {
+        setError(error.message);
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -37,7 +51,7 @@ const Login = ({ theme, history }) => {
       }}
     >
       <CssBaseline />
-      <LoginView {...props} />
+      <LoginView googleSingIn={googleSingIn} loading={loading} />
     </ThemeProvider>
   );
 };

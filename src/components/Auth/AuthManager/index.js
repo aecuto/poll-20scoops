@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { useEffect, createContext, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
@@ -6,32 +6,48 @@ import { AuthRouter } from '..';
 
 import routeUrlProvider, { LOGIN, DASHBOARD } from 'constants/route-paths';
 
+import { firebase } from 'services/firebase';
+import { getToken, removeToken } from 'services/auth/token';
+import Snackbar from 'components/Toast/Snackbar';
+
 export const AuthManagerContext = createContext({});
 
 const AuthManager = ({ children, history }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  // const [info, setInfo] = useState({});
+  const token = getToken();
+  const [isLoggedIn, setIsLoggedIn] = useState(token ? true : false);
+  const [info, setInfo] = useState({});
+  const [error, setError] = useState('');
 
-  // useEffect(() => {
-  //   if (token) {
-  //     getMe()
-  //       .then(res => {
-  //         setIsLoggedIn(true);
-  //         setInfo(res);
-  //       })
-  //       .catch(() => {
-  //         removeToken();
-  //         setIsLoggedIn(false);
-  //       });
-  //   }
-  // }, [history, token]);
+  useEffect(() => {
+    if (token) {
+      firebase.auth().onAuthStateChanged(user => {
+        if (user && check20scoopsUser(user)) {
+          setInfo(user);
+          setIsLoggedIn(true);
+        } else {
+          console.log('remove token');
+          setIsLoggedIn(false);
+          removeToken();
+        }
+      });
+    }
+  }, [history, token]);
+
+  const check20scoopsUser = user => {
+    const email = user.email.split('@');
+    if (email[1] !== '20scoops.com') {
+      setError('Please login with @20scoops');
+      return false;
+    }
+    return true;
+  };
 
   return (
     <AuthManagerContext.Provider
       value={{
-        // info,
-        isLoggedIn,
-        setIsLoggedIn
+        info,
+        setIsLoggedIn,
+        setError
       }}
     >
       <AuthRouter
@@ -41,6 +57,7 @@ const AuthManager = ({ children, history }) => {
         isVerifying={false}
       >
         {children}
+        <Snackbar message={error} severity="error" />
       </AuthRouter>
     </AuthManagerContext.Provider>
   );

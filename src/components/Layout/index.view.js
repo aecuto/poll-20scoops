@@ -13,23 +13,19 @@ import IconButton from '@material-ui/core/IconButton';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Badge from '@material-ui/core/Badge';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
 
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import FlareIcon from '@material-ui/icons/Flare';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
-import SettingsIcon from '@material-ui/icons/Settings';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import useStyles from './useStyles';
 import { DASHBOARD } from 'constants/route-paths';
+
+import { firebase } from 'services/firebase';
 
 const Title = styled(Typography)`
   && {
@@ -49,14 +45,9 @@ const LayoutView = ({
   drawerOpen
 }) => {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleMenu = event => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
+  const onLogout = () => {
+    firebase.auth().signOut();
   };
 
   return (
@@ -85,34 +76,9 @@ const LayoutView = ({
           <IconButton color="inherit" onClick={() => changeMode()}>
             {themeMode === 'dark' ? <Brightness4Icon /> : <FlareIcon />}
           </IconButton>
-          <IconButton color="inherit">
-            <Badge badgeContent={17} color="secondary">
-              <NotificationsIcon />
-            </Badge>
+          <IconButton color="inherit" onClick={onLogout}>
+            <ExitToAppIcon />
           </IconButton>
-          <div>
-            <IconButton color="inherit" onClick={handleMenu}>
-              <AccountCircleIcon />
-            </IconButton>
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={handleClose}>
-                <ListItemIcon>
-                  <AlternateEmailIcon fontSize="small" />
-                </ListItemIcon>
-                <Typography variant="inherit">cms-demo@20scoops.com</Typography>
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <ListItemIcon>
-                  <SettingsIcon fontSize="small" />
-                </ListItemIcon>
-                <Typography variant="inherit">Setting</Typography>
-              </MenuItem>
-            </Menu>
-          </div>
         </Toolbar>
       </AppBar>
       <Drawer
