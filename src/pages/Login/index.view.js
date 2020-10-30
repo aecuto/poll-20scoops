@@ -9,13 +9,15 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import MuiPaper from '@material-ui/core/Paper';
 
+import GoogleIcon from 'assets/icon/GoogleIcon';
+
 const Paper = styled(MuiPaper)`
   && {
     padding: 20px;
   }
 `;
 
-const LoginView = ({ googleSingIn, loading }) => {
+const LoginView = ({ googleSignIn }) => {
   const { t } = useTranslation();
   return (
     <Container>
@@ -37,10 +39,10 @@ const LoginView = ({ googleSingIn, loading }) => {
               variant="outlined"
               color="primary"
               fullWidth
-              onClick={googleSingIn}
-              disabled={loading}
+              onClick={googleSignIn}
+              startIcon={<GoogleIcon />}
             >
-              {loading ? 'loading...' : 'Google Sign In'}
+              Google Sign In
             </Button>
           </Paper>
         </Grid>
@@ -50,8 +52,7 @@ const LoginView = ({ googleSingIn, loading }) => {
 };
 
 LoginView.propTypes = {
-  googleSingIn: PropTypes.any,
-  loading: PropTypes.any
+  googleSignIn: PropTypes.any
 };
 
 export default LoginView;

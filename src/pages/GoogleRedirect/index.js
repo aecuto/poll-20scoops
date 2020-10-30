@@ -2,21 +2,13 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withTheme } from 'styled-components';
 
-import LoginView from './index.view';
-
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { setToken } from 'services/auth/token';
-import { firebase, googleProvider } from 'services/firebase';
-
-import {
-  setLocalStorage,
-  getLocalStorage,
-  removeLocalStorage
-} from 'utils/localStorage';
+import { firebase } from 'services/firebase';
 
 import { useContextAuthManager } from 'components/Auth/AuthManager';
 
@@ -30,14 +22,11 @@ const Login = ({ theme }) => {
   });
 
   const { setIsLoggedIn, setError } = useContextAuthManager();
-  const googleStatus = getLocalStorage('googleStatus');
+
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (googleStatus) {
-      googleSignInResult();
-      removeLocalStorage('googleStatus');
-    }
+    googleSignInResult();
   }, []);
 
   const googleSignInResult = () => {
@@ -59,11 +48,6 @@ const Login = ({ theme }) => {
       .finally(() => setLoading(false));
   };
 
-  const googleSignIn = () => {
-    setLocalStorage('googleStatus', 'redirect');
-    firebase.auth().signInWithRedirect(googleProvider);
-  };
-
   return (
     <ThemeProvider
       theme={{
@@ -72,7 +56,6 @@ const Login = ({ theme }) => {
       }}
     >
       <CssBaseline />
-      <LoginView googleSignIn={googleSignIn} />
       <Backdrop open={loading} style={{ zIndex: 1 }}>
         <CircularProgress color="secondary" />
       </Backdrop>

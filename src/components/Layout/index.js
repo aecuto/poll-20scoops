@@ -7,7 +7,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import LayoutView from './index.view';
 import routeUrlProvider from 'constants/route-paths';
 import theme from 'styles/theme';
-import { setLocalStorage, getLocalStorage } from 'services/layout';
+import { setLocalStorage, getLocalStorage } from 'utils/localStorage';
 
 const Layout = ({ history, children, label }) => {
   const [drawerOpen, setDrawerOpen] = useState(
