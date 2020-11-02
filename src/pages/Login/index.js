@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withTheme } from 'styled-components';
-import GoogleRedirect from './GoogleRedirect';
 
 import LoginView from './index.view';
+import routeUrlProvider, { GOOGLE_REDIRECT } from 'constants/route-paths';
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,7 +12,7 @@ import firebase from 'services/firebase';
 
 import { setLocalStorage, getLocalStorage } from 'utils/localStorage';
 
-const Login = ({ theme }) => {
+const Login = ({ theme, history }) => {
   const muiTheme = createMuiTheme({
     palette: {
       primary: {
@@ -21,7 +21,13 @@ const Login = ({ theme }) => {
     }
   });
 
-  const googleStatus = getLocalStorage('googleStatus');
+  const googleState = getLocalStorage('googleState');
+
+  useEffect(() => {
+    if (googleState) {
+      history.push(routeUrlProvider.getForLink(GOOGLE_REDIRECT));
+    }
+  }, []);
 
   const googleSignIn = () => {
     const googleProvider = new firebase.auth.GoogleAuthProvider();
@@ -30,7 +36,7 @@ const Login = ({ theme }) => {
       prompt: 'consent'
     });
 
-    setLocalStorage('googleStatus', 'redirect');
+    setLocalStorage('googleState', 'redirect');
     firebase.auth().signInWithRedirect(googleProvider);
   };
 
@@ -42,8 +48,7 @@ const Login = ({ theme }) => {
       }}
     >
       <CssBaseline />
-      {googleStatus && <GoogleRedirect />}
-      {!googleStatus && <LoginView googleSignIn={googleSignIn} />}
+      <LoginView googleSignIn={googleSignIn} />
     </ThemeProvider>
   );
 };

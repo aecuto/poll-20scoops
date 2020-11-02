@@ -1,7 +1,8 @@
+import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 
-// import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-// import CssBaseline from '@material-ui/core/CssBaseline';
+import routeUrlProvider, { LOGIN } from 'constants/route-paths';
+
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -12,10 +13,11 @@ import firebase from 'services/firebase';
 
 import { useContextAuthManager } from 'components/Auth/AuthManager';
 
-const GoogleRedirect = () => {
+const GoogleRedirect = ({ history }) => {
   const { setIsLoggedIn, setError } = useContextAuthManager();
 
   useEffect(() => {
+    removeLocalStorage('googleState');
     googleSignInResult();
   }, []);
 
@@ -25,18 +27,17 @@ const GoogleRedirect = () => {
       .getRedirectResult()
       .then(result => {
         if (!result.user) {
+          history.push(routeUrlProvider.getForLink(LOGIN));
           return;
         }
 
-        console.log({ result });
         const { credential } = result;
         setToken(credential.accessToken);
         setIsLoggedIn(true);
       })
       .catch(error => {
         setError(error.message);
-      })
-      .finally(() => removeLocalStorage('googleStatus'));
+      });
   };
 
   return (
@@ -44,6 +45,10 @@ const GoogleRedirect = () => {
       <CircularProgress />
     </Backdrop>
   );
+};
+
+GoogleRedirect.propTypes = {
+  history: PropTypes.any
 };
 
 export default GoogleRedirect;

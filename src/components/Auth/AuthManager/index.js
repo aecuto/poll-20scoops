@@ -21,7 +21,6 @@ const AuthManager = ({ children, history }) => {
   useEffect(() => {
     if (token) {
       firebase.auth().onAuthStateChanged(user => {
-        console.log({ user });
         if (user && check20scoopsUser(user)) {
           setInfo(user);
           setIsLoggedIn(true);
