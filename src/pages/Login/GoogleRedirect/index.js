@@ -8,7 +8,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { removeLocalStorage } from 'utils/localStorage';
 
 import { setToken } from 'services/auth/token';
-import { firebase } from 'services/firebase';
+import firebase from 'services/firebase';
 
 import { useContextAuthManager } from 'components/Auth/AuthManager';
 
@@ -17,7 +17,6 @@ const GoogleRedirect = () => {
 
   useEffect(() => {
     googleSignInResult();
-    removeLocalStorage('googleStatus');
   }, []);
 
   const googleSignInResult = () => {
@@ -28,13 +27,16 @@ const GoogleRedirect = () => {
         if (!result.user) {
           return;
         }
+
+        console.log({ result });
         const { credential } = result;
         setToken(credential.accessToken);
         setIsLoggedIn(true);
       })
       .catch(error => {
         setError(error.message);
-      });
+      })
+      .finally(() => removeLocalStorage('googleStatus'));
   };
 
   return (

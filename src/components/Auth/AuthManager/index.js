@@ -6,7 +6,7 @@ import { AuthRouter } from '..';
 
 import routeUrlProvider, { LOGIN, DASHBOARD } from 'constants/route-paths';
 
-import { firebase } from 'services/firebase';
+import firebase from 'services/firebase';
 import { getToken, removeToken } from 'services/auth/token';
 import Snackbar from 'components/Toast/Snackbar';
 
@@ -21,11 +21,11 @@ const AuthManager = ({ children, history }) => {
   useEffect(() => {
     if (token) {
       firebase.auth().onAuthStateChanged(user => {
+        console.log({ user });
         if (user && check20scoopsUser(user)) {
           setInfo(user);
           setIsLoggedIn(true);
         } else {
-          console.log('remove token');
           setIsLoggedIn(false);
           removeToken();
         }

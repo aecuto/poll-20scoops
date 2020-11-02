@@ -25,7 +25,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import useStyles from './useStyles';
 import { DASHBOARD } from 'constants/route-paths';
 
-import { firebase } from 'services/firebase';
+import firebase from 'services/firebase';
 
 const Title = styled(Typography)`
   && {

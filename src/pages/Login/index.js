@@ -8,7 +8,7 @@ import LoginView from './index.view';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-import { firebase, googleProvider } from 'services/firebase';
+import firebase from 'services/firebase';
 
 import { setLocalStorage, getLocalStorage } from 'utils/localStorage';
 
@@ -24,6 +24,12 @@ const Login = ({ theme }) => {
   const googleStatus = getLocalStorage('googleStatus');
 
   const googleSignIn = () => {
+    const googleProvider = new firebase.auth.GoogleAuthProvider();
+    googleProvider.setCustomParameters({
+      hd: '20scoops.com',
+      prompt: 'consent'
+    });
+
     setLocalStorage('googleStatus', 'redirect');
     firebase.auth().signInWithRedirect(googleProvider);
   };
