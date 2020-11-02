@@ -36,8 +36,8 @@ const Login = ({ theme }) => {
       }}
     >
       <CssBaseline />
-      {!googleStatus && <GoogleRedirect />}
-      {googleStatus && <LoginView googleSignIn={googleSignIn} />}
+      {googleStatus && <GoogleRedirect />}
+      {!googleStatus && <LoginView googleSignIn={googleSignIn} />}
     </ThemeProvider>
   );
 };
