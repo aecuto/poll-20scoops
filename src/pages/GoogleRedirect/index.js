@@ -42,7 +42,7 @@ const GoogleRedirect = ({ history }) => {
 
   return (
     <Backdrop open style={{ backgroundColor: 'inherit' }}>
-      <CircularProgress />
+      <CircularProgress thickness={10} size={60} />
     </Backdrop>
   );
 };
