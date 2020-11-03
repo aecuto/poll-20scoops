@@ -47,13 +47,11 @@ const AuthManager = ({ children, history }) => {
   //   return true;
   // };
 
-  const userState = (state, user, fs) => ({
+  const userState = (state, user) => ({
     displayName: user.displayName,
     photoURL: user.photoURL,
     state,
-    lastChanged: fs
-      ? firebase.firestore.FieldValue.serverTimestamp()
-      : firebase.database.ServerValue.TIMESTAMP
+    lastChanged: firebase.database.ServerValue.TIMESTAMP
   });
 
   const presence = user => {
@@ -63,8 +61,6 @@ const AuthManager = ({ children, history }) => {
 
     const userId = user.uid;
 
-    const userFirestore = firebase.firestore().doc(`/status/${userId}`);
-
     const userRealtimeDb = firebase.database().ref(`/status/${userId}`);
 
     firebase
@@ -72,7 +68,6 @@ const AuthManager = ({ children, history }) => {
       .ref('.info/connected')
       .on('value', snapshot => {
         if (snapshot.val() === false) {
-          userFirestore.set(userState('offline', user, true));
           return;
         }
         userRealtimeDb
@@ -80,20 +75,20 @@ const AuthManager = ({ children, history }) => {
           .set(userState('offline', user))
           .then(() => {
             userRealtimeDb.set(userState('online', user));
-            userFirestore.set(userState('online', user, true));
           });
       });
   };
 
   const listenOnline = () => {
     firebase
-      .firestore()
-      .collection('status')
-      .orderBy('lastChanged', 'desc')
-      .onSnapshot(querySnapshot => {
+      .database()
+      .ref(`/status`)
+      .on('value', function(snapshot) {
         const users = [];
-        querySnapshot.forEach(doc => {
-          users.push(doc.data());
+
+        snapshot.forEach(function(childSnapshot) {
+          const childData = childSnapshot.val();
+          users.push(childData);
         });
         setUsers(users);
       });
