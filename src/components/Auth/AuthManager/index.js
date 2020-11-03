@@ -22,57 +22,21 @@ const AuthManager = ({ children, history }) => {
     if (token) {
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
-          userOnline(user);
           setInfo(user);
           setIsLoggedIn(true);
+
+          presence(user);
+          listenOnline();
           firebase.database().goOnline();
         } else {
           setIsLoggedIn(false);
           removeToken();
+
           firebase.database().goOffline();
         }
       });
     }
   }, [history, token]);
-
-  const firestoreState = state => ({
-    state,
-    last_changed: firebase.firestore.FieldValue.serverTimestamp()
-  });
-
-  const databaseState = state => ({
-    state,
-    last_changed: firebase.database.ServerValue.TIMESTAMP
-  });
-
-  const userOnline = user => {
-    if (!user.uid) {
-      return;
-    }
-
-    const userId = user.uid;
-
-    const userFirestore = firebase.firestore().doc(`/status/${userId}`);
-
-    const userDatabase = firebase.database().ref(`/status/${userId}`);
-
-    firebase
-      .database()
-      .ref('.info/connected')
-      .on('value', function(snapshot) {
-        if (snapshot.val() === false) {
-          userFirestore.set(firestoreState('offline'));
-          return;
-        }
-        userDatabase
-          .onDisconnect()
-          .set(databaseState('offline'))
-          .then(function() {
-            userDatabase.set('online');
-            userFirestore.set(firestoreState('online'));
-          });
-      });
-  };
 
   // const check20scoopsUser = user => {
   //   const email = user.email.split('@');
@@ -82,6 +46,64 @@ const AuthManager = ({ children, history }) => {
   //   }
   //   return true;
   // };
+
+  const firestoreState = (state, name) => ({
+    name,
+    state,
+    last_changed: firebase.firestore.FieldValue.serverTimestamp()
+  });
+
+  const databaseState = (state, name) => ({
+    name,
+    state,
+    last_changed: firebase.database.ServerValue.TIMESTAMP
+  });
+
+  const presence = user => {
+    if (!user.uid) {
+      return;
+    }
+
+    const userId = user.uid;
+
+    const userFirestore = firebase.firestore().doc(`/status/${userId}`);
+
+    const userRealtimeDb = firebase.database().ref(`/status/${userId}`);
+
+    firebase
+      .database()
+      .ref('.info/connected')
+      .on('value', snapshot => {
+        if (snapshot.val() === false) {
+          userFirestore.set(firestoreState('offline', user.displayName));
+          return;
+        }
+        userRealtimeDb
+          .onDisconnect()
+          .set(databaseState('offline', user.displayName))
+          .then(() => {
+            userRealtimeDb.set(databaseState('online', user.displayName));
+            userFirestore.set(firestoreState('online', user.displayName));
+          });
+      });
+  };
+
+  const listenOnline = () => {
+    firebase
+      .firestore()
+      .collection('status')
+      .where('state', '==', 'online')
+      .onSnapshot(snapshot => {
+        snapshot.docChanges().forEach(change => {
+          if (change.type === 'added') {
+            console.log(`${change.doc.data().name} is online`);
+          }
+          if (change.type === 'removed') {
+            console.log(`${change.doc.data().name} is offline`);
+          }
+        });
+      });
+  };
 
   return (
     <AuthManagerContext.Provider
