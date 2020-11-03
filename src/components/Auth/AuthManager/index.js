@@ -21,16 +21,76 @@ const AuthManager = ({ children, history }) => {
   useEffect(() => {
     if (token) {
       firebase.auth().onAuthStateChanged(user => {
-        if (user && check20scoopsUser(user)) {
+        if (user) {
           setInfo(user);
           setIsLoggedIn(true);
         } else {
           setIsLoggedIn(false);
           removeToken();
         }
+        userOnline();
       });
     }
   }, [history, token]);
+
+  const userOnline = () => {
+    if (!isLoggedIn) {
+      return;
+    }
+
+    const userId = info.uid;
+
+    // const userStatusFirestoreRef = firebase
+    //   .firestore()
+    //   .doc(`/status/${userId}`);
+
+    const userStatusDatabaseRef = firebase.database().ref(`/status/${userId}`);
+
+    // const isOfflineForFirestore = {
+    //   state: 'offline',
+    //   last_changed: firebase.firestore.FieldValue.serverTimestamp()
+    // };
+
+    // const isOnlineForFirestore = {
+    //   state: 'online',
+    //   last_changed: firebase.firestore.FieldValue.serverTimestamp()
+    // };
+
+    const isOfflineForDatabase = {
+      state: 'offline',
+      last_changed: firebase.database.ServerValue.TIMESTAMP
+    };
+
+    // const isOnlineForDatabase = {
+    //   state: 'online',
+    //   last_changed: firebase.database.ServerValue.TIMESTAMP
+    // };
+
+    firebase
+      .database()
+      .ref('.info/connected')
+      .on('value', function(snapshot) {
+        if (snapshot.val()) {
+          console.log('connect');
+          userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase);
+        } else {
+          console.log('Disconnect');
+        }
+        // if (snapshot.val() === false) {
+        //   console.log('offline', userId);
+        //   userStatusFirestoreRef.set(isOfflineForFirestore);
+        // }
+
+        //   .then(function() {
+        //     console.log('online', userId);
+
+        //     userStatusDatabaseRef.set(isOnlineForDatabase);
+
+        //     // We'll also add Firestore set here for when we come online.
+        //     userStatusFirestoreRef.set(isOnlineForFirestore);
+        //   });
+      });
+  };
 
   const check20scoopsUser = user => {
     const email = user.email.split('@');
