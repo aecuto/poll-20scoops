@@ -25,15 +25,15 @@ const UsersState = () => {
     setOpen(false);
   };
 
+  const filterUsers = users.filter(user => user.state === 'online').reverse();
+
   return (
     <>
       <Button onClick={handleClickOpen}>
         <AvatarGroup>
-          {users
-            .filter(user => user.state === 'online')
-            .map((user, index) => (
-              <Avatar key={index} alt={user.displayName} src={user.photoURL} />
-            ))}
+          {filterUsers.map((user, index) => (
+            <Avatar key={index} alt={user.displayName} src={user.photoURL} />
+          ))}
         </AvatarGroup>
       </Button>
       <Dialog onClose={handleClose} open={open}>

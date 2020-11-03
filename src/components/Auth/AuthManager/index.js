@@ -83,6 +83,7 @@ const AuthManager = ({ children, history }) => {
     firebase
       .database()
       .ref(`/status`)
+      .orderByChild('lastChanged')
       .on('value', function(snapshot) {
         const users = [];
 
