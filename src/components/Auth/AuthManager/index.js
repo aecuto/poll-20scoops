@@ -22,84 +22,66 @@ const AuthManager = ({ children, history }) => {
     if (token) {
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
+          userOnline(user);
           setInfo(user);
           setIsLoggedIn(true);
+          firebase.database().goOnline();
         } else {
           setIsLoggedIn(false);
           removeToken();
+          firebase.database().goOffline();
         }
-        userOnline();
       });
     }
   }, [history, token]);
 
-  const userOnline = () => {
-    if (!isLoggedIn) {
+  const firestoreState = state => ({
+    state,
+    last_changed: firebase.firestore.FieldValue.serverTimestamp()
+  });
+
+  const databaseState = state => ({
+    state,
+    last_changed: firebase.database.ServerValue.TIMESTAMP
+  });
+
+  const userOnline = user => {
+    if (!user.uid) {
       return;
     }
 
-    const userId = info.uid;
+    const userId = user.uid;
 
-    // const userStatusFirestoreRef = firebase
-    //   .firestore()
-    //   .doc(`/status/${userId}`);
+    const userFirestore = firebase.firestore().doc(`/status/${userId}`);
 
-    const userStatusDatabaseRef = firebase.database().ref(`/status/${userId}`);
-
-    // const isOfflineForFirestore = {
-    //   state: 'offline',
-    //   last_changed: firebase.firestore.FieldValue.serverTimestamp()
-    // };
-
-    // const isOnlineForFirestore = {
-    //   state: 'online',
-    //   last_changed: firebase.firestore.FieldValue.serverTimestamp()
-    // };
-
-    const isOfflineForDatabase = {
-      state: 'offline',
-      last_changed: firebase.database.ServerValue.TIMESTAMP
-    };
-
-    // const isOnlineForDatabase = {
-    //   state: 'online',
-    //   last_changed: firebase.database.ServerValue.TIMESTAMP
-    // };
+    const userDatabase = firebase.database().ref(`/status/${userId}`);
 
     firebase
       .database()
       .ref('.info/connected')
       .on('value', function(snapshot) {
-        if (snapshot.val()) {
-          console.log('connect');
-          userStatusDatabaseRef.onDisconnect().set(isOfflineForDatabase);
-        } else {
-          console.log('Disconnect');
+        if (snapshot.val() === false) {
+          userFirestore.set(firestoreState('offline'));
+          return;
         }
-        // if (snapshot.val() === false) {
-        //   console.log('offline', userId);
-        //   userStatusFirestoreRef.set(isOfflineForFirestore);
-        // }
-
-        //   .then(function() {
-        //     console.log('online', userId);
-
-        //     userStatusDatabaseRef.set(isOnlineForDatabase);
-
-        //     // We'll also add Firestore set here for when we come online.
-        //     userStatusFirestoreRef.set(isOnlineForFirestore);
-        //   });
+        userDatabase
+          .onDisconnect()
+          .set(databaseState('offline'))
+          .then(function() {
+            userDatabase.set('online');
+            userFirestore.set(firestoreState('online'));
+          });
       });
   };
 
-  const check20scoopsUser = user => {
-    const email = user.email.split('@');
-    if (email[1] !== '20scoops.com') {
-      setError('Please login with @20scoops');
-      return false;
-    }
-    return true;
-  };
+  // const check20scoopsUser = user => {
+  //   const email = user.email.split('@');
+  //   if (email[1] !== '20scoops.com') {
+  //     setError('Please login with @20scoops');
+  //     return false;
+  //   }
+  //   return true;
+  // };
 
   return (
     <AuthManagerContext.Provider
