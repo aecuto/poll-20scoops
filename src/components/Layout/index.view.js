@@ -27,6 +27,8 @@ import { DASHBOARD } from 'constants/route-paths';
 
 import firebase from 'services/firebase';
 
+import UserState from './UsersState';
+
 const Title = styled(Typography)`
   && {
     flex: 1;
@@ -73,6 +75,7 @@ const LayoutView = ({
           <Title variant="h3" noWrap>
             {label}
           </Title>
+          <UserState />
           <IconButton color="inherit" onClick={() => changeMode()}>
             {themeMode === 'dark' ? <Brightness4Icon /> : <FlareIcon />}
           </IconButton>

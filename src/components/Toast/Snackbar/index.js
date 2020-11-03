@@ -42,7 +42,7 @@ CustomizedSnackbars.propTypes = {
 CustomizedSnackbars.defaultProps = {
   severity: 'info',
   message: '',
-  autoHideDuration: 6000
+  autoHideDuration: 1500
 };
 
 export default CustomizedSnackbars;

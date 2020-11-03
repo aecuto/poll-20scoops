@@ -8,21 +8,21 @@ import routeUrlProvider, { LOGIN, DASHBOARD } from 'constants/route-paths';
 
 import firebase from 'services/firebase';
 import { getToken, removeToken } from 'services/auth/token';
-import Snackbar from 'components/Toast/Snackbar';
 
 export const AuthManagerContext = createContext({});
 
 const AuthManager = ({ children, history }) => {
   const token = getToken();
   const [isLoggedIn, setIsLoggedIn] = useState(token ? true : false);
-  const [info, setInfo] = useState({});
+  const [userInfo, setUserInfo] = useState({});
   const [error, setError] = useState('');
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     if (token) {
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
-          setInfo(user);
+          setUserInfo(user);
           setIsLoggedIn(true);
 
           presence(user);
@@ -47,16 +47,13 @@ const AuthManager = ({ children, history }) => {
   //   return true;
   // };
 
-  const firestoreState = (state, name) => ({
-    name,
+  const userState = (state, user, fs) => ({
+    displayName: user.displayName,
+    photoURL: user.photoURL,
     state,
-    last_changed: firebase.firestore.FieldValue.serverTimestamp()
-  });
-
-  const databaseState = (state, name) => ({
-    name,
-    state,
-    last_changed: firebase.database.ServerValue.TIMESTAMP
+    lastChanged: fs
+      ? firebase.firestore.FieldValue.serverTimestamp()
+      : firebase.database.ServerValue.TIMESTAMP
   });
 
   const presence = user => {
@@ -75,15 +72,15 @@ const AuthManager = ({ children, history }) => {
       .ref('.info/connected')
       .on('value', snapshot => {
         if (snapshot.val() === false) {
-          userFirestore.set(firestoreState('offline', user.displayName));
+          userFirestore.set(userState('offline', user, true));
           return;
         }
         userRealtimeDb
           .onDisconnect()
-          .set(databaseState('offline', user.displayName))
+          .set(userState('offline', user))
           .then(() => {
-            userRealtimeDb.set(databaseState('online', user.displayName));
-            userFirestore.set(firestoreState('online', user.displayName));
+            userRealtimeDb.set(userState('online', user));
+            userFirestore.set(userState('online', user, true));
           });
       });
   };
@@ -92,25 +89,24 @@ const AuthManager = ({ children, history }) => {
     firebase
       .firestore()
       .collection('status')
-      .where('state', '==', 'online')
-      .onSnapshot(snapshot => {
-        snapshot.docChanges().forEach(change => {
-          if (change.type === 'added') {
-            console.log(`${change.doc.data().name} is online`);
-          }
-          if (change.type === 'removed') {
-            console.log(`${change.doc.data().name} is offline`);
-          }
+      .orderBy('lastChanged', 'desc')
+      .onSnapshot(querySnapshot => {
+        const users = [];
+        querySnapshot.forEach(doc => {
+          users.push(doc.data());
         });
+        setUsers(users);
       });
   };
 
   return (
     <AuthManagerContext.Provider
       value={{
-        info,
+        userInfo,
         setIsLoggedIn,
-        setError
+        setError,
+        error,
+        users
       }}
     >
       <AuthRouter
@@ -120,7 +116,6 @@ const AuthManager = ({ children, history }) => {
         isVerifying={false}
       >
         {children}
-        <Snackbar message={error} severity="error" />
       </AuthRouter>
     </AuthManagerContext.Provider>
   );

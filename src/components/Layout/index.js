@@ -9,7 +9,12 @@ import routeUrlProvider from 'constants/route-paths';
 import theme from 'styles/theme';
 import { setLocalStorage, getLocalStorage } from 'utils/localStorage';
 
+import Snackbar from 'components/Toast/Snackbar';
+import { useContextAuthManager } from 'components/Auth/AuthManager';
+
 const Layout = ({ history, children, label }) => {
+  const { error } = useContextAuthManager();
+
   const [drawerOpen, setDrawerOpen] = useState(
     getLocalStorage('drawerOpen') === 'false' ? false : true
   );
@@ -82,6 +87,7 @@ const Layout = ({ history, children, label }) => {
     >
       <CssBaseline />
       <LayoutView {...props} />
+      <Snackbar message={error} severity="error" />
     </ThemeProvider>
   );
 };
