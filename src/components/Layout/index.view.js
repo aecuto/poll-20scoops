@@ -99,7 +99,7 @@ const LayoutView = ({
       >
         <div className={classes.toolbar}>
           <Title style={{ paddingLeft: '10px' }} noWrap>
-            <b>CMS Boilerplate Demo</b>
+            <b>Poll 20scoops</b>
           </Title>
           <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />

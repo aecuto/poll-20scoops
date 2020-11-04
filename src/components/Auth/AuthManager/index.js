@@ -91,7 +91,19 @@ const AuthManager = ({ children, history }) => {
           const childData = childSnapshot.val();
           users.push(childData);
         });
-        setUsers(users);
+
+        const mockUser = [];
+        for (let i = 0; i < 10; i += 1) {
+          mockUser.push({
+            displayName: 'test user',
+            photoURL: null,
+            state: 'offline',
+            lastChanged: Date.now()
+          });
+        }
+        const testUser = [...users, ...mockUser];
+
+        setUsers(testUser);
       });
   };
 
