@@ -17,7 +17,7 @@ const Paper = styled(MuiPaper)`
   }
 `;
 
-const LoginView = ({ googleSignIn }) => {
+const View = ({ googleSignIn }) => {
   const { t } = useTranslation();
   return (
     <Container>
@@ -33,7 +33,7 @@ const LoginView = ({ googleSignIn }) => {
           </Typography>
           <Paper>
             <Typography variant="h4" align="center" paragraph>
-              {t('login_title')}
+              {t('sing_in_title')}
             </Typography>
             <Button
               variant="outlined"
@@ -42,7 +42,7 @@ const LoginView = ({ googleSignIn }) => {
               onClick={googleSignIn}
               startIcon={<GoogleIcon />}
             >
-              Google Sign In
+              {t('sing_in_button')}
             </Button>
           </Paper>
         </Grid>
@@ -51,8 +51,8 @@ const LoginView = ({ googleSignIn }) => {
   );
 };
 
-LoginView.propTypes = {
+View.propTypes = {
   googleSignIn: PropTypes.any
 };
 
-export default LoginView;
+export default View;

@@ -1,25 +1,27 @@
 import React from 'react';
 
 import routeUrlProvider, {
-  LOGIN,
+  SIGN_IN,
   GOOGLE_REDIRECT,
-  DASHBOARD
+  POLL_CREATE,
+  VOTE
 } from 'constants/route-paths';
 
 import PublicRoute from 'components/Auth/PublicRoute';
 import PrivateRoute from 'components/Auth/PrivateRoute';
 
-import Login from './pages/Login';
+import SignIn from './pages/SignIn';
 import GoogleRedirect from './pages/GoogleRedirect';
-import Dashboard from './pages/Dashboard';
+import PollCreate from './pages/Poll/Create';
+import Vote from './pages/Vote';
 
 const Router = () => {
   return (
     <div>
       <PublicRoute
         exact
-        path={routeUrlProvider.getForRoute(LOGIN)}
-        component={Login}
+        path={routeUrlProvider.getForRoute(SIGN_IN)}
+        component={SignIn}
       />
       <PublicRoute
         exact
@@ -28,8 +30,13 @@ const Router = () => {
       />
       <PrivateRoute
         exact
-        path={routeUrlProvider.getForRoute(DASHBOARD)}
-        component={Dashboard}
+        path={routeUrlProvider.getForRoute(POLL_CREATE)}
+        component={PollCreate}
+      />
+      <PrivateRoute
+        exact
+        path={routeUrlProvider.getForRoute(VOTE)}
+        component={Vote}
       />
     </div>
   );

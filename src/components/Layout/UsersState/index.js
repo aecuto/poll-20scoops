@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
@@ -15,7 +15,7 @@ import { useContextAuthManager } from 'components/Auth/AuthManager';
 const UsersState = () => {
   const { users } = useContextAuthManager();
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);

@@ -1,13 +1,15 @@
 import createRouteUrlProvider from 'utils/routeUrlProvider';
 
-export const LOGIN = 'LOGIN';
+export const SIGN_IN = 'SIGN_IN';
 export const GOOGLE_REDIRECT = 'GOOGLE_REDIRECT';
-export const DASHBOARD = 'DASHBOARD';
+export const POLL_CREATE = 'POLL_CREATE';
+export const VOTE = 'VOTE';
 
 const routeUrlProvider = createRouteUrlProvider();
 
-routeUrlProvider.set(LOGIN, '/');
+routeUrlProvider.set(SIGN_IN, '/');
 routeUrlProvider.set(GOOGLE_REDIRECT, '/google-redirect');
-routeUrlProvider.set(DASHBOARD, '/dashboard');
+routeUrlProvider.set(POLL_CREATE, '/create');
+routeUrlProvider.set(VOTE, '/vote');
 
 export default routeUrlProvider;

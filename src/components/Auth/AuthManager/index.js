@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
 import { AuthRouter } from '..';
-
-import routeUrlProvider, { LOGIN, DASHBOARD } from 'constants/route-paths';
+import routeUrlProvider, { SIGN_IN, VOTE } from 'constants/route-paths';
 
 import firebase from 'services/firebase';
 import { getToken, removeToken } from 'services/auth/token';
@@ -48,6 +47,7 @@ const AuthManager = ({ children, history }) => {
   // };
 
   const userState = (state, user) => ({
+    email: user.email,
     displayName: user.displayName,
     photoURL: user.photoURL,
     state,
@@ -61,7 +61,7 @@ const AuthManager = ({ children, history }) => {
 
     const userId = user.uid;
 
-    const userRealtimeDb = firebase.database().ref(`/status/${userId}`);
+    const userRealtimeDb = firebase.database().ref(`/users/${userId}`);
 
     firebase
       .database()
@@ -82,7 +82,7 @@ const AuthManager = ({ children, history }) => {
   const listenOnline = () => {
     firebase
       .database()
-      .ref(`/status`)
+      .ref(`/users`)
       .orderByChild('lastChanged')
       .on('value', function(snapshot) {
         const users = [];
@@ -119,8 +119,8 @@ const AuthManager = ({ children, history }) => {
     >
       <AuthRouter
         isAuth={isLoggedIn}
-        privateKickTo={routeUrlProvider.getForRoute(LOGIN)}
-        publicKickTo={routeUrlProvider.getForRoute(DASHBOARD)}
+        privateKickTo={routeUrlProvider.getForRoute(SIGN_IN)}
+        publicKickTo={routeUrlProvider.getForRoute(VOTE)}
         isVerifying={false}
       >
         {children}

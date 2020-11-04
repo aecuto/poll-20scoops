@@ -19,7 +19,7 @@ import FlareIcon from '@material-ui/icons/Flare';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
-import { DASHBOARD } from 'constants/route-paths';
+import { VOTE, POLL_CREATE } from 'constants/route-paths';
 import firebase from 'services/firebase';
 
 import useStyles from './useStyles';
@@ -50,13 +50,23 @@ const LayoutView = ({
       <List>
         <ListItem
           button
-          onClick={() => menuLink(DASHBOARD)}
-          selected={menuSelected === DASHBOARD}
+          onClick={() => menuLink(VOTE)}
+          selected={menuSelected === VOTE}
         >
           <ListItemIcon>
             <DashboardIcon />
           </ListItemIcon>
-          <ListItemText primary="Dashboard" />
+          <ListItemText primary="Vote Polls" />
+        </ListItem>
+        <ListItem
+          button
+          onClick={() => menuLink(POLL_CREATE)}
+          selected={menuSelected === POLL_CREATE}
+        >
+          <ListItemIcon>
+            <DashboardIcon />
+          </ListItemIcon>
+          <ListItemText primary="Create a Poll" />
         </ListItem>
       </List>
     </div>

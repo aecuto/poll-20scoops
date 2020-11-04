@@ -57,7 +57,7 @@ const Layout = ({ history, children }) => {
     setDrawerOpen(false);
   };
 
-  const menuSelected = getLocalStorage('menuSelected') || 'DASHBOARD';
+  const menuSelected = getLocalStorage('menuSelected') || 'VOTE';
 
   const props = {
     children,

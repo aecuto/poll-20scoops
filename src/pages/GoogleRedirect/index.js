@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 
-import routeUrlProvider, { LOGIN } from 'constants/route-paths';
+import routeUrlProvider, { SIGN_IN } from 'constants/route-paths';
 
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -27,7 +27,7 @@ const GoogleRedirect = ({ history }) => {
       .getRedirectResult()
       .then(result => {
         if (!result.user) {
-          history.push(routeUrlProvider.getForLink(LOGIN));
+          history.push(routeUrlProvider.getForLink(SIGN_IN));
           return;
         }
 

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withTheme } from 'styled-components';
 
-import LoginView from './index.view';
+import SignInView from './index.view';
 import routeUrlProvider, { GOOGLE_REDIRECT } from 'constants/route-paths';
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -12,7 +12,7 @@ import firebase from 'services/firebase';
 
 import { setLocalStorage, getLocalStorage } from 'utils/localStorage';
 
-const Login = ({ theme, history }) => {
+const SignIn = ({ theme, history }) => {
   const muiTheme = createMuiTheme({
     palette: {
       primary: {
@@ -48,14 +48,14 @@ const Login = ({ theme, history }) => {
       }}
     >
       <CssBaseline />
-      <LoginView googleSignIn={googleSignIn} />
+      <SignInView googleSignIn={googleSignIn} />
     </ThemeProvider>
   );
 };
 
-Login.propTypes = {
+SignIn.propTypes = {
   history: PropTypes.object,
   theme: PropTypes.object
 };
 
-export default withTheme(Login);
+export default withTheme(SignIn);

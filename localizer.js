@@ -5,6 +5,6 @@ module.exports = {
     de: 'de.js'
   },
   url:
-    'https://docs.google.com/spreadsheets/d/1E09zAMmgzw1RKuKLzrveoh5c9VS3Qv7yMW6PByjZHfU/edit#gid=331032730',
+    'https://docs.google.com/spreadsheets/d/1VzJfUJfsOY_kKiKlfDF1qr-E3BdzzjEqYAq9UcMWjv4/edit#gid=331032730',
   sheetName: 'sheet'
 };
