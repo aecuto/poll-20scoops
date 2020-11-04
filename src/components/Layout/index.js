@@ -12,12 +12,10 @@ import { setLocalStorage, getLocalStorage } from 'utils/localStorage';
 import Snackbar from 'components/Toast/Snackbar';
 import { useContextAuthManager } from 'components/Auth/AuthManager';
 
-const Layout = ({ history, children, label }) => {
+const Layout = ({ history, children }) => {
   const { error } = useContextAuthManager();
 
-  const [drawerOpen, setDrawerOpen] = useState(
-    getLocalStorage('drawerOpen') === 'false' ? false : true
-  );
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [themeMode, setThemeMode] = useState(
     getLocalStorage('themeMode') || 'light'
   );
@@ -52,12 +50,10 @@ const Layout = ({ history, children, label }) => {
   };
 
   const handleDrawerOpen = () => {
-    setLocalStorage('drawerOpen', true);
     setDrawerOpen(true);
   };
 
   const handleDrawerClose = () => {
-    setLocalStorage('drawerOpen', false);
     setDrawerOpen(false);
   };
 
@@ -65,7 +61,6 @@ const Layout = ({ history, children, label }) => {
 
   const props = {
     children,
-    label,
     menuLink,
     menuSelected,
     themeMode,
