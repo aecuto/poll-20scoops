@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import styled from 'styled-components';
 
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -11,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Hidden from '@material-ui/core/Hidden';
 
 import MenuIcon from '@material-ui/icons/Menu';
 import DashboardIcon from '@material-ui/icons/Dashboard';
@@ -20,15 +20,10 @@ import Brightness4Icon from '@material-ui/icons/Brightness4';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import { DASHBOARD } from 'constants/route-paths';
-
 import firebase from 'services/firebase';
 
+import useStyles from './useStyles';
 import UserState from './UsersState';
-
-const Content = styled.main`
-  margin-top: 60px;
-  padding: 30px;
-`;
 
 const LayoutView = ({
   children,
@@ -40,21 +35,43 @@ const LayoutView = ({
   handleDrawerClose,
   drawerOpen
 }) => {
-  // const classes = useStyles();
+  const classes = useStyles();
 
   const onLogout = () => {
     firebase.auth().signOut();
   };
 
-  return (
+  const drawer = (
     <div>
-      <AppBar>
+      <ListItem>
+        <ListItemText primary="Poll 20scoops" secondary="@OKRs" />
+      </ListItem>
+      <Divider />
+      <List>
+        <ListItem
+          button
+          onClick={() => menuLink(DASHBOARD)}
+          selected={menuSelected === DASHBOARD}
+        >
+          <ListItemIcon>
+            <DashboardIcon />
+          </ListItemIcon>
+          <ListItemText primary="Dashboard" />
+        </ListItem>
+      </List>
+    </div>
+  );
+
+  return (
+    <div className={classes.root}>
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
             onClick={() => handleDrawerOpen()}
             edge="start"
+            className={classes.menuButton}
           >
             <MenuIcon />
           </IconButton>
@@ -68,28 +85,40 @@ const LayoutView = ({
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Drawer open={drawerOpen} onClose={handleDrawerClose}>
-        <div style={{ width: '240px' }}>
-          <ListItem>
-            <ListItemText primary="Poll 20scoops" secondary="@OKRs" />
-          </ListItem>
-          <Divider />
-          <List>
-            <ListItem
-              button
-              onClick={() => menuLink(DASHBOARD)}
-              selected={menuSelected === DASHBOARD}
-            >
-              <ListItemIcon>
-                <DashboardIcon />
-              </ListItemIcon>
-              <ListItemText primary="Dashboard" />
-            </ListItem>
-          </List>
-        </div>
-      </Drawer>
 
-      <Content>{children}</Content>
+      <nav className={classes.drawer} aria-label="mailbox folders">
+        <Hidden smUp implementation="css">
+          <Drawer
+            variant="temporary"
+            open={drawerOpen}
+            onClose={handleDrawerClose}
+            classes={{
+              paper: classes.drawerPaper
+            }}
+            ModalProps={{
+              keepMounted: true // Better open performance on mobile.
+            }}
+          >
+            {drawer}
+          </Drawer>
+        </Hidden>
+        <Hidden xsDown implementation="css">
+          <Drawer
+            classes={{
+              paper: classes.drawerPaper
+            }}
+            variant="permanent"
+            open
+          >
+            {drawer}
+          </Drawer>
+        </Hidden>
+      </nav>
+
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+        {children}
+      </main>
     </div>
   );
 };
