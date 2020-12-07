@@ -40,7 +40,7 @@ const Component = ({ history }) => {
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
-        <ListItemText primary="Create a Poll" />
+        <ListItemText primary="Poll List" />
       </ListItem>
     </List>
   );

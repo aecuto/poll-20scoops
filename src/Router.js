@@ -4,7 +4,7 @@ import routeUrlProvider, {
   SIGN_IN,
   GOOGLE_REDIRECT,
   POLL_LIST,
-  POLL_CREATE,
+  POLL_SAVE,
   VOTE
 } from 'constants/route-paths';
 
@@ -29,7 +29,7 @@ const pollRoute = () => {
       />
       <PrivateRoute
         exact
-        path={routeUrlProvider.getForRoute(POLL_CREATE)}
+        path={routeUrlProvider.getForRoute(POLL_SAVE)}
         component={PollSave}
       />
     </>

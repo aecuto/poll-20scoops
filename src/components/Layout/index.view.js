@@ -19,7 +19,6 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import firebase from 'services/firebase';
 
 import useStyles from './useStyles';
-import UserState from './UsersState';
 import Menu from './Menu';
 
 const LayoutView = ({
@@ -60,7 +59,6 @@ const LayoutView = ({
             <MenuIcon />
           </IconButton>
           <div style={{ flexGrow: '1' }} />
-          <UserState />
           <IconButton color="inherit" onClick={() => changeMode()}>
             {themeMode === 'dark' ? <Brightness4Icon /> : <FlareIcon />}
           </IconButton>
