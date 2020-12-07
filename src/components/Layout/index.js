@@ -1,18 +1,16 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { withRouter } from 'react-router-dom';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import LayoutView from './index.view';
-import routeUrlProvider from 'constants/route-paths';
 import theme from 'styles/theme';
 import { setLocalStorage, getLocalStorage } from 'utils/localStorage';
 
 import Snackbar from 'components/Toast/Snackbar';
 import { useContextAuthManager } from 'components/Auth/AuthManager';
 
-const Layout = ({ history, children }) => {
+const Layout = ({ children }) => {
   const { error } = useContextAuthManager();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -38,11 +36,6 @@ const Layout = ({ history, children }) => {
     });
   };
 
-  const menuLink = path => {
-    setLocalStorage('menuSelected', path);
-    history.push(routeUrlProvider.getForLink(path));
-  };
-
   const changeMode = () => {
     const newThemeMode = themeMode === 'light' ? 'dark' : 'light';
     setLocalStorage('themeMode', newThemeMode);
@@ -57,12 +50,8 @@ const Layout = ({ history, children }) => {
     setDrawerOpen(false);
   };
 
-  const menuSelected = getLocalStorage('menuSelected') || 'VOTE';
-
   const props = {
     children,
-    menuLink,
-    menuSelected,
     themeMode,
     changeMode,
     handleDrawerOpen,
@@ -94,4 +83,4 @@ Layout.propTypes = {
   location: PropTypes.any
 };
 
-export default withRouter(Layout);
+export default Layout;

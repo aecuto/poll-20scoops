@@ -4,31 +4,26 @@ import React from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Hidden from '@material-ui/core/Hidden';
 
 import MenuIcon from '@material-ui/icons/Menu';
-import DashboardIcon from '@material-ui/icons/Dashboard';
 
 import FlareIcon from '@material-ui/icons/Flare';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
-import { VOTE, POLL_CREATE } from 'constants/route-paths';
 import firebase from 'services/firebase';
 
 import useStyles from './useStyles';
 import UserState from './UsersState';
+import Menu from './Menu';
 
 const LayoutView = ({
   children,
-  menuLink,
-  menuSelected,
   themeMode,
   changeMode,
   handleDrawerOpen,
@@ -47,28 +42,7 @@ const LayoutView = ({
         <ListItemText primary="Poll 20scoops" secondary="@OKRs" />
       </ListItem>
       <Divider />
-      <List>
-        <ListItem
-          button
-          onClick={() => menuLink(VOTE)}
-          selected={menuSelected === VOTE}
-        >
-          <ListItemIcon>
-            <DashboardIcon />
-          </ListItemIcon>
-          <ListItemText primary="Vote Polls" />
-        </ListItem>
-        <ListItem
-          button
-          onClick={() => menuLink(POLL_CREATE)}
-          selected={menuSelected === POLL_CREATE}
-        >
-          <ListItemIcon>
-            <DashboardIcon />
-          </ListItemIcon>
-          <ListItemText primary="Create a Poll" />
-        </ListItem>
-      </List>
+      <Menu />
     </div>
   );
 

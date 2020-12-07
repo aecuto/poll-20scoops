@@ -3,6 +3,7 @@ import React from 'react';
 import routeUrlProvider, {
   SIGN_IN,
   GOOGLE_REDIRECT,
+  POLL_LIST,
   POLL_CREATE,
   VOTE
 } from 'constants/route-paths';
@@ -12,8 +13,28 @@ import PrivateRoute from 'components/Auth/PrivateRoute';
 
 import SignIn from './pages/SignIn';
 import GoogleRedirect from './pages/GoogleRedirect';
-import PollCreate from './pages/Poll/Create';
+
+import PollList from './pages/Poll/List';
+import PollSave from './pages/Poll/Save';
+
 import Vote from './pages/Vote';
+
+const pollRoute = () => {
+  return (
+    <>
+      <PrivateRoute
+        exact
+        path={routeUrlProvider.getForRoute(POLL_LIST)}
+        component={PollList}
+      />
+      <PrivateRoute
+        exact
+        path={routeUrlProvider.getForRoute(POLL_CREATE)}
+        component={PollSave}
+      />
+    </>
+  );
+};
 
 const Router = () => {
   return (
@@ -28,11 +49,9 @@ const Router = () => {
         path={routeUrlProvider.getForRoute(GOOGLE_REDIRECT)}
         component={GoogleRedirect}
       />
-      <PrivateRoute
-        exact
-        path={routeUrlProvider.getForRoute(POLL_CREATE)}
-        component={PollCreate}
-      />
+
+      {pollRoute()}
+
       <PrivateRoute
         exact
         path={routeUrlProvider.getForRoute(VOTE)}
