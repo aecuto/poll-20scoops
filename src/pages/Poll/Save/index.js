@@ -111,13 +111,10 @@ const Component = ({ match, history }) => {
                     />
                   </Grid>
                 </Grid>
-
                 <Divider />
-
                 <Grid container>
                   <Typography>Answer Options</Typography>
                 </Grid>
-
                 <FieldArray name="answer">
                   {({ fields }) =>
                     fields.map((name, index) => (
@@ -146,7 +143,6 @@ const Component = ({ match, history }) => {
                     ))
                   }
                 </FieldArray>
-
                 <Grid container justify="center" style={{ margin: '20px' }}>
                   <Button
                     variant="contained"
@@ -157,7 +153,6 @@ const Component = ({ match, history }) => {
                     Add Answer
                   </Button>
                 </Grid>
-
                 <Grid container justify="center" style={{ margin: '20px' }}>
                   <Button
                     color="primary"
@@ -168,8 +163,6 @@ const Component = ({ match, history }) => {
                     Submit
                   </Button>
                 </Grid>
-
-                <pre>{JSON.stringify(values, 0, 2)}</pre>
               </form>
             );
           }}
