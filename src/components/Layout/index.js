@@ -7,7 +7,7 @@ import LayoutView from './index.view';
 import theme from 'styles/theme';
 import { setLocalStorage, getLocalStorage } from 'utils/localStorage';
 
-import Snackbar from 'components/Toast/Snackbar';
+import Snackbar from 'components/Snackbar';
 import { useContextAuthManager } from 'components/Auth/AuthManager';
 
 const Layout = ({ children }) => {

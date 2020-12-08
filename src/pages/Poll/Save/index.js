@@ -20,6 +20,7 @@ import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
 
 import TextField from 'components/FinalForm/TextField';
+import Snackbar from 'components/Snackbar';
 
 import { reqCreate, reqGet, reqDelete, reqUpdate } from 'services/poll';
 import routeUrlProvider, { POLL_SAVE, POLL_LIST } from 'constants/route-paths';
@@ -43,6 +44,7 @@ const Component = ({ match, history }) => {
   const isCreate = pollId === 'create';
 
   const [data, setData] = useState({});
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     if (!isCreate) {
@@ -52,11 +54,16 @@ const Component = ({ match, history }) => {
 
   const onSubmit = values => {
     if (isCreate) {
-      return reqCreate(values).then(doc =>
-        history.push(routeUrlProvider.getForLink(POLL_SAVE, { pollId: doc.id }))
-      );
+      return reqCreate(values).then(doc => {
+        setMessage('Create Success!');
+        history.push(
+          routeUrlProvider.getForLink(POLL_SAVE, { pollId: doc.id })
+        );
+      });
     } else {
-      return reqUpdate(pollId, values);
+      return reqUpdate(pollId, values).then(() =>
+        setMessage('Update Success!')
+      );
     }
   };
 
@@ -68,6 +75,7 @@ const Component = ({ match, history }) => {
 
   return (
     <Layout>
+      <Snackbar message={message} severity="success" />
       <Paper>
         <Grid container style={{ marginBottom: '20px' }}>
           <Grid item xs={6}>
@@ -94,8 +102,7 @@ const Component = ({ match, history }) => {
               mutators: { push }
             },
             pristine,
-            submitting,
-            values
+            submitting
           }) => {
             return (
               <form onSubmit={handleSubmit}>
@@ -143,25 +150,27 @@ const Component = ({ match, history }) => {
                     ))
                   }
                 </FieldArray>
-                <Grid container justify="center" style={{ margin: '20px' }}>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    startIcon={<AddCircleIcon />}
-                    onClick={() => push('answer', undefined)}
-                  >
-                    Add Answer
-                  </Button>
-                </Grid>
-                <Grid container justify="center" style={{ margin: '20px' }}>
-                  <Button
-                    color="primary"
-                    type="submit"
-                    disabled={submitting || pristine}
-                    variant="contained"
-                  >
-                    Submit
-                  </Button>
+                <Grid container spacing={3}>
+                  <Grid item xs={12} style={{ textAlign: 'center' }}>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      startIcon={<AddCircleIcon />}
+                      onClick={() => push('answer', undefined)}
+                    >
+                      Add Answer
+                    </Button>
+                  </Grid>
+                  <Grid item xs={12} style={{ textAlign: 'right' }}>
+                    <Button
+                      color="primary"
+                      type="submit"
+                      disabled={submitting || pristine}
+                      variant="contained"
+                    >
+                      Submit
+                    </Button>
+                  </Grid>
                 </Grid>
               </form>
             );
