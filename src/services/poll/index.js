@@ -36,7 +36,10 @@ export const reqList = () => {
 };
 
 export const reqGet = pollId => {
-  return db.doc(pollId).get();
+  return db
+    .doc(pollId)
+    .get()
+    .then(doc => ({ id: doc.id, ...doc.data() }));
 };
 
 export const reqDelete = pollId => {

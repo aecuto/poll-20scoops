@@ -46,9 +46,11 @@ const Component = ({ match, history }) => {
   const [data, setData] = useState({});
   const [message, setMessage] = useState('');
 
+  console.log(data);
+
   useEffect(() => {
     if (!isCreate) {
-      reqGet(pollId).then(doc => setData(doc.data()));
+      reqGet(pollId).then(data => setData(data));
     }
   }, [pollId]);
 
