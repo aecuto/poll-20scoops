@@ -1,6 +1,6 @@
 import firebase from '../firebase';
 
-const db = firebase.firestore().collection('vote');
+export const db = firebase.firestore().collection('vote');
 
 export const reqVote = values => {
   const data = {

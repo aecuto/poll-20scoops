@@ -6,7 +6,8 @@ import routeUrlProvider, {
   POLL_LIST,
   POLL_SAVE,
   VOTE_LIST,
-  VOTE_ANSWER
+  VOTE_ANSWER,
+  VOTE_RESULT
 } from 'constants/route-paths';
 
 import PublicRoute from 'components/Auth/PublicRoute';
@@ -20,6 +21,7 @@ import PollSave from './pages/Poll/Save';
 
 import VoteList from './pages/Vote/List';
 import VoteAnswer from './pages/Vote/Answer';
+import VoteResult from './pages/Vote/Result';
 
 const pollRoute = () => {
   return (
@@ -50,6 +52,11 @@ const voteRoute = () => {
         exact
         path={routeUrlProvider.getForRoute(VOTE_ANSWER)}
         component={VoteAnswer}
+      />
+      <PrivateRoute
+        exact
+        path={routeUrlProvider.getForRoute(VOTE_RESULT)}
+        component={VoteResult}
       />
     </>
   );

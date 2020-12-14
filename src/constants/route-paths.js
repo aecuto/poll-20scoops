@@ -8,6 +8,7 @@ export const POLL_SAVE = 'POLL_SAVE';
 
 export const VOTE_LIST = 'VOTE_LIST';
 export const VOTE_ANSWER = 'VOTE_ANSWER';
+export const VOTE_RESULT = 'VOTE_RESULT';
 
 const routeUrlProvider = createRouteUrlProvider();
 
@@ -19,5 +20,6 @@ routeUrlProvider.set(POLL_SAVE, '/poll/:pollId');
 
 routeUrlProvider.set(VOTE_LIST, '/votes');
 routeUrlProvider.set(VOTE_ANSWER, '/votes/:pollId');
+routeUrlProvider.set(VOTE_RESULT, '/votes/:pollId/result');
 
 export default routeUrlProvider;

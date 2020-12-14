@@ -15,6 +15,7 @@ import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 
 import Radio from 'components/FinalForm/Radio';
+import routeUrlProvider, { VOTE_RESULT } from 'constants/route-paths';
 
 const Paper = styled(MuiPaper)`
   && {
@@ -22,7 +23,7 @@ const Paper = styled(MuiPaper)`
   }
 `;
 
-const Component = ({ match }) => {
+const Component = ({ match, history }) => {
   const { pollId } = match.params;
   const [data, setData] = useState({});
 
@@ -31,7 +32,11 @@ const Component = ({ match }) => {
   }, []);
 
   const onSubmit = values => {
-    return reqVote(values);
+    return reqVote(values).then(() => onResult());
+  };
+
+  const onResult = () => {
+    history.push(routeUrlProvider.getForLink(VOTE_RESULT, { pollId }));
   };
 
   const renderVoteAnswer = () => {
@@ -72,7 +77,9 @@ const Component = ({ match }) => {
                   </Button>
                 </Grid>
                 <Grid item xs={6} style={{ textAlign: 'right' }}>
-                  <Button variant="contained">Result</Button>
+                  <Button variant="contained" onClick={() => onResult()}>
+                    Result
+                  </Button>
                 </Grid>
               </Grid>
 
@@ -88,6 +95,7 @@ const Component = ({ match }) => {
 };
 
 Component.propTypes = {
+  history: PropTypes.object,
   match: PropTypes.object
 };
 

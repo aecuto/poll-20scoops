@@ -33,7 +33,6 @@ const Component = ({ history }) => {
   }, []);
 
   const onClick = pollId => {
-    console.log(pollId);
     history.push(routeUrlProvider.getForLink(VOTE_ANSWER, { pollId }));
   };
 
