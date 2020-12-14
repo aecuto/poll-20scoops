@@ -88,7 +88,7 @@ const Component = ({ history }) => {
                     variant="contained"
                     onClick={event => {
                       event.stopPropagation();
-                      reqShare(data.id);
+                      reqShare(data.title, data.id);
                     }}
                   >
                     Share Poll

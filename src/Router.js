@@ -5,7 +5,8 @@ import routeUrlProvider, {
   GOOGLE_REDIRECT,
   POLL_LIST,
   POLL_SAVE,
-  VOTE
+  VOTE_LIST,
+  VOTE_ANSWER
 } from 'constants/route-paths';
 
 import PublicRoute from 'components/Auth/PublicRoute';
@@ -17,7 +18,8 @@ import GoogleRedirect from './pages/GoogleRedirect';
 import PollList from './pages/Poll/List';
 import PollSave from './pages/Poll/Save';
 
-import Vote from './pages/Vote';
+import VoteList from './pages/Vote/List';
+import VoteAnswer from './pages/Vote/Answer';
 
 const pollRoute = () => {
   return (
@@ -31,6 +33,23 @@ const pollRoute = () => {
         exact
         path={routeUrlProvider.getForRoute(POLL_SAVE)}
         component={PollSave}
+      />
+    </>
+  );
+};
+
+const voteRoute = () => {
+  return (
+    <>
+      <PrivateRoute
+        exact
+        path={routeUrlProvider.getForRoute(VOTE_LIST)}
+        component={VoteList}
+      />
+      <PrivateRoute
+        exact
+        path={routeUrlProvider.getForRoute(VOTE_ANSWER)}
+        component={VoteAnswer}
       />
     </>
   );
@@ -51,12 +70,7 @@ const Router = () => {
       />
 
       {pollRoute()}
-
-      <PrivateRoute
-        exact
-        path={routeUrlProvider.getForRoute(VOTE)}
-        component={Vote}
-      />
+      {voteRoute()}
     </div>
   );
 };

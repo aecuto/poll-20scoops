@@ -8,12 +8,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 
-import routeUrlProvider, { VOTE, POLL_LIST } from 'constants/route-paths';
+import routeUrlProvider, { VOTE_LIST, POLL_LIST } from 'constants/route-paths';
 
 import { setLocalStorage, getLocalStorage } from 'utils/localStorage';
 
 const Component = ({ history }) => {
-  const menuSelected = getLocalStorage('menuSelected') || 'VOTE';
+  const menuSelected = getLocalStorage('menuSelected') || 'VOTE_LIST';
 
   const menuLink = path => {
     setLocalStorage('menuSelected', path);
@@ -24,8 +24,8 @@ const Component = ({ history }) => {
     <List>
       <ListItem
         button
-        onClick={() => menuLink(VOTE)}
-        selected={menuSelected === VOTE}
+        onClick={() => menuLink(VOTE_LIST)}
+        selected={menuSelected === VOTE_LIST}
       >
         <ListItemIcon>
           <DashboardIcon />

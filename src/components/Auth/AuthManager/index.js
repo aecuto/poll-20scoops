@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
 import { AuthRouter } from '..';
-import routeUrlProvider, { SIGN_IN, VOTE } from 'constants/route-paths';
+import routeUrlProvider, { SIGN_IN, VOTE_LIST } from 'constants/route-paths';
 
 import firebase from 'services/firebase';
 import { getToken, removeToken } from 'services/auth/token';
@@ -120,7 +120,7 @@ const AuthManager = ({ children, history }) => {
       <AuthRouter
         isAuth={isLoggedIn}
         privateKickTo={routeUrlProvider.getForRoute(SIGN_IN)}
-        publicKickTo={routeUrlProvider.getForRoute(VOTE)}
+        publicKickTo={routeUrlProvider.getForRoute(VOTE_LIST)}
         isVerifying={false}
       >
         {children}

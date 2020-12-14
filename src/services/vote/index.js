@@ -1,11 +1,10 @@
 import firebase from '../firebase';
 
-export const db = firebase.firestore().collection('share-polls');
+const db = firebase.firestore().collection('vote');
 
-export const reqShare = async (title, pollId) => {
+export const reqVote = values => {
   const data = {
-    title,
-    pollId,
+    ...values,
     created_at: firebase.firestore.FieldValue.serverTimestamp()
   };
   return db.add(data);
