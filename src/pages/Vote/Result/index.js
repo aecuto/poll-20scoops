@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from 'components/Layout';
 import { db } from 'services/vote';
 import { reqGet } from 'services/poll';
@@ -8,6 +8,7 @@ import count from '../Result/count';
 
 const Component = ({ match }) => {
   const { pollId } = match.params;
+  const [result, setResult] = useState({});
 
   useEffect(() => {
     fetchData();
@@ -20,9 +21,11 @@ const Component = ({ match }) => {
       querySnapshot.forEach(doc => {
         list.push(doc.data());
       });
-      count(poll, list);
+      setResult(count(poll, list));
     });
   };
+
+  console.log(result);
 
   return <Layout>Result {pollId}</Layout>;
 };
