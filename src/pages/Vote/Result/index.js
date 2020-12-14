@@ -4,11 +4,16 @@ import Layout from 'components/Layout';
 import { db } from 'services/vote';
 import { reqGet } from 'services/poll';
 
+import { formatPercent } from 'utils/numeral';
+
 import count from '../Result/count';
+
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
 
 const Component = ({ match }) => {
   const { pollId } = match.params;
-  const [result, setResult] = useState({});
+  const [data, setData] = useState({});
 
   useEffect(() => {
     fetchData();
@@ -21,13 +26,28 @@ const Component = ({ match }) => {
       querySnapshot.forEach(doc => {
         list.push(doc.data());
       });
-      setResult(count(poll, list));
+      setData(count(poll, list));
     });
   };
 
-  console.log(result);
+  console.log(data);
 
-  return <Layout>Result {pollId}</Layout>;
+  const renderData = () => {
+    return (
+      <>
+        <Typography variant="h1">{data.title}</Typography>
+        <Grid container>
+          {data.result.map(data => (
+            <Grid item xs={12}>
+              {data.label}-{formatPercent(data.percentage)}
+            </Grid>
+          ))}
+        </Grid>
+      </>
+    );
+  };
+
+  return <Layout>{data.title ? renderData() : null}</Layout>;
 };
 
 Component.propTypes = {
