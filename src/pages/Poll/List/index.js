@@ -24,6 +24,8 @@ import routeUrlProvider, {
 import { reqList } from 'services/poll';
 import { reqShare } from 'services/share-poll';
 
+import Snackbar from 'components/Snackbar';
+
 const Paper = styled(MuiPaper)`
   && {
     padding: 20px;
@@ -39,6 +41,7 @@ const Divider = styled(MuiDivider)`
 
 const Component = ({ history }) => {
   const [list, setList] = useState([]);
+  const [message, setMessage] = useState({});
 
   useEffect(() => {
     reqList().then(list => setList(list));
@@ -56,8 +59,19 @@ const Component = ({ history }) => {
     history.push(routeUrlProvider.getForLink(VOTE_RESULT, { pollId }));
   };
 
+  const onShare = data => {
+    reqShare(data.title, data.id).then(() =>
+      setMessage({
+        text: `Poll ${data.title} have been shared.`,
+        lastUpdated: Date.now()
+      })
+    );
+  };
+
   return (
     <Layout>
+      <Snackbar message={message} severity="success" autoHideDuration={5000} />
+
       <Grid container>
         <Grid item xs={12} md={8}>
           <Typography variant="h3">List</Typography>
@@ -110,7 +124,7 @@ const Component = ({ history }) => {
                     color="secondary"
                     onClick={event => {
                       event.stopPropagation();
-                      reqShare(data.title, data.id);
+                      onShare(data);
                     }}
                   >
                     Share

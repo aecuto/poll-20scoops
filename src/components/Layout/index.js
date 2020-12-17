@@ -71,7 +71,10 @@ const Layout = ({ children }) => {
     >
       <CssBaseline />
       <LayoutView {...props} />
-      <Snackbar message={error} severity="error" />
+      <Snackbar
+        message={{ text: error, lastUpdated: Date.now() }}
+        severity="error"
+      />
     </ThemeProvider>
   );
 };

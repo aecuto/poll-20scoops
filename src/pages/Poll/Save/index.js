@@ -46,7 +46,7 @@ const Component = ({ match, history }) => {
   const isCreate = pollId === 'create';
 
   const [data, setData] = useState({});
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState({});
 
   useEffect(() => {
     if (!isCreate) {
@@ -59,13 +59,15 @@ const Component = ({ match, history }) => {
 
     if (isCreate) {
       return reqCreate(data).then(doc => {
-        setMessage('Create Success!');
+        setMessage({ text: 'Create Success!', lastUpdated: Date.now() });
         history.push(
           routeUrlProvider.getForLink(POLL_SAVE, { pollId: doc.id })
         );
       });
     } else {
-      return reqUpdate(pollId, data).then(() => setMessage('Update Success!'));
+      return reqUpdate(pollId, data).then(() =>
+        setMessage({ text: 'Update Success!', lastUpdated: Date.now() })
+      );
     }
   };
 

@@ -7,10 +7,10 @@ const CustomizedSnackbars = ({ severity, message, autoHideDuration }) => {
   const [open, setOpen] = React.useState(false);
 
   useEffect(() => {
-    if (message) {
+    if (message.text) {
       setOpen(true);
     }
-  }, [message]);
+  }, [message.lastUpdated]);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -31,7 +31,7 @@ const CustomizedSnackbars = ({ severity, message, autoHideDuration }) => {
       }}
     >
       <Alert onClose={handleClose} severity={severity}>
-        {message}
+        {message.text}
       </Alert>
     </Snackbar>
   );
@@ -39,13 +39,13 @@ const CustomizedSnackbars = ({ severity, message, autoHideDuration }) => {
 
 CustomizedSnackbars.propTypes = {
   autoHideDuration: PropTypes.number,
-  message: PropTypes.string,
+  message: PropTypes.object,
   severity: PropTypes.string
 };
 
 CustomizedSnackbars.defaultProps = {
   severity: 'info',
-  message: '',
+  message: { text: '' },
   autoHideDuration: 1500
 };
 
