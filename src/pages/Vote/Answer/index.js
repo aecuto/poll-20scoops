@@ -42,51 +42,53 @@ const Component = ({ match, history }) => {
   const renderVoteAnswer = () => {
     return (
       <Paper>
-        <Grid container>
-          <Typography variant="h1">{data.title}</Typography>
-        </Grid>
-        <Divider style={{ marginBottom: '20px' }} />
-        <Form
-          onSubmit={onSubmit}
-          initialValues={{ pollId: data.id }}
-          render={({ handleSubmit, submitting, pristine, values }) => (
-            <form onSubmit={handleSubmit}>
-              <Grid container spacing={3}>
-                {data.answer.map((answer, index) => (
-                  <Grid item xs={12} key={index}>
-                    <Field
-                      name="answer"
-                      component={Radio}
-                      label={answer.label}
-                    />
+        <Grid container justify="center">
+          <Grid item xs={6}>
+            <Grid container>
+              <Typography variant="h1">{data.title}</Typography>
+            </Grid>
+            <Divider style={{ marginBottom: '20px' }} />
+            <Form
+              onSubmit={onSubmit}
+              initialValues={{ pollId: data.id }}
+              render={({ handleSubmit, submitting, pristine, values }) => (
+                <form onSubmit={handleSubmit}>
+                  <Grid container spacing={3} justify="center">
+                    {data.answer.map((answer, index) => (
+                      <Grid item xs={12} key={index}>
+                        <Field
+                          name="answer"
+                          component={Radio}
+                          label={answer.label}
+                        />
+                      </Grid>
+                    ))}
                   </Grid>
-                ))}
-              </Grid>
 
-              <Divider style={{ marginBottom: '20px' }} />
+                  <Divider style={{ marginBottom: '20px' }} />
 
-              <Grid container>
-                <Grid item xs={6}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    disabled={pristine || submitting}
-                  >
-                    Vote
-                  </Button>
-                </Grid>
-                <Grid item xs={6} style={{ textAlign: 'right' }}>
-                  <Button variant="contained" onClick={() => onResult()}>
-                    Result
-                  </Button>
-                </Grid>
-              </Grid>
-
-              <pre>{JSON.stringify(values, 0, 2)}</pre>
-            </form>
-          )}
-        />
+                  <Grid container>
+                    <Grid item xs={6}>
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        disabled={pristine || submitting}
+                      >
+                        Vote
+                      </Button>
+                    </Grid>
+                    <Grid item xs={6} style={{ textAlign: 'right' }}>
+                      <Button variant="contained" onClick={() => onResult()}>
+                        Result
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </form>
+              )}
+            />
+          </Grid>
+        </Grid>
       </Paper>
     );
   };

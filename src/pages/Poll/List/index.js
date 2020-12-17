@@ -16,7 +16,10 @@ import Button from '@material-ui/core/Button';
 
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import SearchIcon from '@material-ui/icons/Search';
-import routeUrlProvider, { POLL_SAVE } from 'constants/route-paths';
+import routeUrlProvider, {
+  POLL_SAVE,
+  VOTE_RESULT
+} from 'constants/route-paths';
 import { reqList } from 'services/poll';
 import { reqShare } from 'services/share-poll';
 
@@ -46,6 +49,10 @@ const Component = ({ history }) => {
 
   const onUpdate = pollId => {
     history.push(routeUrlProvider.getForLink(POLL_SAVE, { pollId }));
+  };
+
+  const onResult = pollId => {
+    history.push(routeUrlProvider.getForLink(VOTE_RESULT, { pollId }));
   };
 
   return (
@@ -80,10 +87,21 @@ const Component = ({ history }) => {
           <Grid item xs={12} key={data.id}>
             <Paper onClick={() => onUpdate(data.id)}>
               <Grid container>
-                <Grid item xs={6}>
+                <Grid item xs={10}>
                   {data.title}
                 </Grid>
-                <Grid item xs={6} style={{ textAlign: 'right' }}>
+                <Grid item xs={1} style={{ textAlign: 'right' }}>
+                  <Button
+                    variant="contained"
+                    onClick={event => {
+                      event.stopPropagation();
+                      onResult(data.id);
+                    }}
+                  >
+                    Result
+                  </Button>
+                </Grid>
+                <Grid item xs={1} style={{ textAlign: 'right' }}>
                   <Button
                     variant="contained"
                     onClick={event => {
@@ -91,7 +109,7 @@ const Component = ({ history }) => {
                       reqShare(data.title, data.id);
                     }}
                   >
-                    Share Poll
+                    Share
                   </Button>
                 </Grid>
               </Grid>
