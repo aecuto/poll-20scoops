@@ -9,8 +9,9 @@ import routeUrlProvider, { VOTE_ANSWER } from 'constants/route-paths';
 
 import MuiPaper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-
-import { formatDate } from 'utils/dateTime';
+import Typography from '@material-ui/core/Typography';
+import Chip from '@material-ui/core/Chip';
+import TimeAgo from 'react-timeago';
 
 const Paper = styled(MuiPaper)`
   && {
@@ -41,8 +42,19 @@ const Component = ({ history }) => {
       <Grid container spacing={3}>
         {list.map((data, index) => (
           <Grid item xs={12} key={index}>
-            <Paper onClick={() => onClick(data.pollId)}>
-              {data.title} - {formatDate(data.created_at.toDate())}
+            <Paper
+              onClick={() => onClick(data.pollId)}
+              variant="outlined"
+              square
+            >
+              <Typography variant="h5" paragraph>
+                {`#${index + 1}. `}
+                {data.title}
+              </Typography>
+              <Chip
+                label={<TimeAgo date={data.created_at.toDate()} />}
+                color={!index ? 'secondary' : 'default'}
+              />
             </Paper>
           </Grid>
         ))}

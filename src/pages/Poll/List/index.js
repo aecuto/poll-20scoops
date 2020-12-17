@@ -84,12 +84,14 @@ const Component = ({ history }) => {
       <Divider />
 
       <Grid container spacing={3}>
-        {list.map(data => (
+        {list.map((data, index) => (
           <Grid item xs={12} key={data.id}>
             <Paper onClick={() => onUpdate(data.id)}>
               <Grid container spacing={3}>
                 <Grid item xs={12}>
-                  <Typography variant="h3">{data.title}</Typography>
+                  <Typography variant="h3">
+                    {`#${index + 1}. `} {data.title}
+                  </Typography>
                 </Grid>
 
                 <Grid item xs={12} style={{ textAlign: 'right' }}>
