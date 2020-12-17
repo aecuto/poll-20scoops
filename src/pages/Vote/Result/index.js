@@ -54,7 +54,7 @@ const Component = ({ match, history }) => {
         <Space />
 
         <Grid container justify="center">
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             {data.result.map((value, index) => (
               <LinearProgress
                 key={index}

@@ -7,6 +7,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 
 import routeUrlProvider, { VOTE_LIST, POLL_LIST } from 'constants/route-paths';
 
@@ -28,7 +29,7 @@ const Component = ({ history }) => {
         selected={menuSelected === VOTE_LIST}
       >
         <ListItemIcon>
-          <DashboardIcon />
+          <ThumbUpIcon />
         </ListItemIcon>
         <ListItemText primary="Vote Polls" />
       </ListItem>

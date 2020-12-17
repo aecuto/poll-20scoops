@@ -10,10 +10,10 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import MuiDivider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Delete from '@material-ui/icons/Delete';
-import BackspaceIcon from '@material-ui/icons/Backspace';
 
 import { Form, Field } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
@@ -24,6 +24,8 @@ import Snackbar from 'components/Snackbar';
 
 import { reqCreate, reqGet, reqDelete, reqUpdate } from 'services/poll';
 import routeUrlProvider, { POLL_SAVE, POLL_LIST } from 'constants/route-paths';
+import { compact } from 'lodash';
+import { required } from 'utils/form/validators';
 
 const Divider = styled(MuiDivider)`
   && {
@@ -46,8 +48,6 @@ const Component = ({ match, history }) => {
   const [data, setData] = useState({});
   const [message, setMessage] = useState('');
 
-  console.log(data);
-
   useEffect(() => {
     if (!isCreate) {
       reqGet(pollId).then(data => setData(data));
@@ -55,17 +55,17 @@ const Component = ({ match, history }) => {
   }, [pollId]);
 
   const onSubmit = values => {
+    const data = { ...values, answer: compact(values.answer) };
+
     if (isCreate) {
-      return reqCreate(values).then(doc => {
+      return reqCreate(data).then(doc => {
         setMessage('Create Success!');
         history.push(
           routeUrlProvider.getForLink(POLL_SAVE, { pollId: doc.id })
         );
       });
     } else {
-      return reqUpdate(pollId, values).then(() =>
-        setMessage('Update Success!')
-      );
+      return reqUpdate(pollId, data).then(() => setMessage('Update Success!'));
     }
   };
 
@@ -73,6 +73,25 @@ const Component = ({ match, history }) => {
     return reqDelete(pollId).then(() =>
       history.push(routeUrlProvider.getForLink(POLL_LIST))
     );
+  };
+
+  const autoAdd = (push, values, index) => {
+    if (index === values.answer.length - 1) {
+      push('answer', undefined);
+    }
+  };
+
+  const validateAnswer = value => {
+    if (!compact(value).length) {
+      return 'required';
+    }
+  };
+
+  const checkError = meta => {
+    const error =
+      (meta.touched && meta.error) ||
+      (!meta.dirtySinceLastSubmit && meta.submitError);
+    return error;
   };
 
   return (
@@ -104,75 +123,64 @@ const Component = ({ match, history }) => {
               mutators: { push }
             },
             pristine,
-            submitting
+            submitting,
+            values
           }) => {
             return (
               <form onSubmit={handleSubmit}>
                 <Grid container spacing={3}>
                   <Grid item xs={12}>
-                    <Field name="title" label="Title" component={TextField} />
+                    <Field
+                      name="title"
+                      label="Title"
+                      component={TextField}
+                      validate={required('Title')}
+                    />
                   </Grid>
                   <Grid item xs={12}>
                     <Field
-                      name="description"
-                      label="Description"
+                      name="group"
+                      label="Group (ex. okrs-q4-2020)"
                       component={TextField}
+                      validate={required('Group')}
                     />
                   </Grid>
                 </Grid>
                 <Divider />
-                <Grid container>
-                  <Typography>Answer Options</Typography>
-                </Grid>
-                <FieldArray name="answer">
-                  {({ fields }) =>
-                    fields.map((name, index) => (
-                      <Paper key={name}>
-                        <Grid container>
-                          <Grid item xs={6}>
-                            {`Answer #${index + 1}`}
-                          </Grid>
-                          <Grid item xs={6} style={{ textAlign: 'right' }}>
-                            <IconButton
-                              onClick={() => fields.remove(index)}
-                              color="secondary"
-                            >
-                              <BackspaceIcon />
-                            </IconButton>
-                          </Grid>
-                          <Grid item xs={12}>
-                            <Field
-                              name={`${name}.label`}
-                              component={TextField}
-                              placeholder="answer"
-                            />
-                          </Grid>
-                        </Grid>
-                      </Paper>
-                    ))
-                  }
+
+                <FieldArray name="answer" validate={validateAnswer}>
+                  {({ fields, meta }) => (
+                    <FormControl error={Boolean(checkError(meta))} fullWidth>
+                      <FormLabel>
+                        <Typography gutterBottom>
+                          Answer Options
+                          {checkError(meta) && ` (${checkError(meta)})`}
+                        </Typography>
+                      </FormLabel>
+                      {fields.map((name, index) => (
+                        <Field
+                          key={index}
+                          name={`${name}.label`}
+                          component={TextField}
+                          placeholder={`Answer #${index + 1}`}
+                          onClick={() => autoAdd(push, values, index)}
+                        />
+                      ))}
+                    </FormControl>
+                  )}
                 </FieldArray>
-                <Grid container spacing={3}>
-                  <Grid item xs={12} style={{ textAlign: 'center' }}>
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      startIcon={<AddCircleIcon />}
-                      onClick={() => push('answer', undefined)}
-                    >
-                      Add Answer
-                    </Button>
-                  </Grid>
-                  <Grid item xs={12} style={{ textAlign: 'right' }}>
-                    <Button
-                      color="primary"
-                      type="submit"
-                      disabled={submitting || pristine}
-                      variant="contained"
-                    >
-                      Submit
-                    </Button>
-                  </Grid>
+
+                <Divider />
+
+                <Grid container justify="center">
+                  <Button
+                    color="primary"
+                    type="submit"
+                    disabled={submitting || pristine}
+                    variant="contained"
+                  >
+                    Submit
+                  </Button>
                 </Grid>
               </form>
             );

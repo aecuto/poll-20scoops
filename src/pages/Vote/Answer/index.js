@@ -43,7 +43,7 @@ const Component = ({ match, history }) => {
     return (
       <Paper>
         <Grid container justify="center">
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             <Grid container>
               <Typography variant="h1">{data.title}</Typography>
             </Grid>

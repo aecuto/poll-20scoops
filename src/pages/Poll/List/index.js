@@ -16,6 +16,7 @@ import Button from '@material-ui/core/Button';
 
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import SearchIcon from '@material-ui/icons/Search';
+
 import routeUrlProvider, {
   POLL_SAVE,
   VOTE_RESULT
@@ -58,10 +59,10 @@ const Component = ({ history }) => {
   return (
     <Layout>
       <Grid container>
-        <Grid item xs={8}>
+        <Grid item xs={12} md={8}>
           <Typography variant="h3">List</Typography>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={11} md={3}>
           <FormControl fullWidth>
             <Input
               placeholder="search"
@@ -73,7 +74,7 @@ const Component = ({ history }) => {
             />
           </FormControl>
         </Grid>
-        <Grid item xs={1} style={{ textAlign: 'right' }}>
+        <Grid item xs={1} md={1} style={{ textAlign: 'right' }}>
           <IconButton onClick={onCreate}>
             <AddCircleIcon />
           </IconButton>
@@ -86,13 +87,15 @@ const Component = ({ history }) => {
         {list.map(data => (
           <Grid item xs={12} key={data.id}>
             <Paper onClick={() => onUpdate(data.id)}>
-              <Grid container>
-                <Grid item xs={10}>
-                  {data.title}
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <Typography variant="h3">{data.title}</Typography>
                 </Grid>
-                <Grid item xs={1} style={{ textAlign: 'right' }}>
+
+                <Grid item xs={12} style={{ textAlign: 'right' }}>
                   <Button
                     variant="contained"
+                    style={{ marginRight: '10px' }}
                     onClick={event => {
                       event.stopPropagation();
                       onResult(data.id);
@@ -100,10 +103,9 @@ const Component = ({ history }) => {
                   >
                     Result
                   </Button>
-                </Grid>
-                <Grid item xs={1} style={{ textAlign: 'right' }}>
                   <Button
                     variant="contained"
+                    color="secondary"
                     onClick={event => {
                       event.stopPropagation();
                       reqShare(data.title, data.id);
