@@ -24,13 +24,15 @@ const Component = ({ history }) => {
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    db.orderBy('created_at', 'desc').onSnapshot(querySnapshot => {
-      const list = [];
-      querySnapshot.forEach(doc => {
-        list.push(doc.data());
+    db.orderBy('created_at', 'desc')
+      .limit(5)
+      .onSnapshot(querySnapshot => {
+        const list = [];
+        querySnapshot.forEach(doc => {
+          list.push(doc.data());
+        });
+        setList(list);
       });
-      setList(list);
-    });
   }, []);
 
   const onClick = pollId => {

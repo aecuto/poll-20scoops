@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useDebouncedCallback } from 'use-debounce';
 
 import Layout from 'components/Layout';
 
@@ -42,10 +43,15 @@ const Divider = styled(MuiDivider)`
 const Component = ({ history }) => {
   const [list, setList] = useState([]);
   const [message, setMessage] = useState({});
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     reqList().then(list => setList(list));
   }, []);
+
+  const debounced = useDebouncedCallback(value => {
+    setSearch(value);
+  }, 300);
 
   const onCreate = () => {
     history.push(routeUrlProvider.getForLink(POLL_SAVE, { pollId: 'create' }));
@@ -85,6 +91,7 @@ const Component = ({ history }) => {
                   <SearchIcon />
                 </InputAdornment>
               }
+              onChange={event => debounced.callback(event.target.value)}
             />
           </FormControl>
         </Grid>
@@ -98,42 +105,44 @@ const Component = ({ history }) => {
       <Divider />
 
       <Grid container spacing={3}>
-        {list.map((data, index) => (
-          <Grid item xs={12} key={data.id}>
-            <Paper onClick={() => onUpdate(data.id)}>
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <Typography variant="h3">
-                    {`#${index + 1}. `} {data.title}
-                  </Typography>
-                </Grid>
+        {list
+          .filter(data => data.title.includes(search))
+          .map((data, index) => (
+            <Grid item xs={12} key={data.id}>
+              <Paper onClick={() => onUpdate(data.id)}>
+                <Grid container spacing={3}>
+                  <Grid item xs={12}>
+                    <Typography variant="h3">
+                      {`#${index + 1}. `} {data.title}
+                    </Typography>
+                  </Grid>
 
-                <Grid item xs={12} style={{ textAlign: 'right' }}>
-                  <Button
-                    variant="contained"
-                    style={{ marginRight: '10px' }}
-                    onClick={event => {
-                      event.stopPropagation();
-                      onResult(data.id);
-                    }}
-                  >
-                    Result
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={event => {
-                      event.stopPropagation();
-                      onShare(data);
-                    }}
-                  >
-                    Share
-                  </Button>
+                  <Grid item xs={12} style={{ textAlign: 'right' }}>
+                    <Button
+                      variant="contained"
+                      style={{ marginRight: '10px' }}
+                      onClick={event => {
+                        event.stopPropagation();
+                        onResult(data.id);
+                      }}
+                    >
+                      Result
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={event => {
+                        event.stopPropagation();
+                        onShare(data);
+                      }}
+                    >
+                      Share
+                    </Button>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Paper>
-          </Grid>
-        ))}
+              </Paper>
+            </Grid>
+          ))}
       </Grid>
     </Layout>
   );
