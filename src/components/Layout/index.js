@@ -7,12 +7,7 @@ import LayoutView from './index.view';
 import theme from 'styles/theme';
 import { setLocalStorage, getLocalStorage } from 'utils/localStorage';
 
-import Snackbar from 'components/Snackbar';
-import { useContextAuthManager } from 'components/Auth/AuthManager';
-
 const Layout = ({ children, menu }) => {
-  const { error } = useContextAuthManager();
-
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [themeMode, setThemeMode] = useState(
     getLocalStorage('themeMode') || 'light'
@@ -72,10 +67,6 @@ const Layout = ({ children, menu }) => {
     >
       <CssBaseline />
       <LayoutView {...props} />
-      <Snackbar
-        message={{ text: error, lastUpdated: Date.now() }}
-        severity="error"
-      />
     </ThemeProvider>
   );
 };

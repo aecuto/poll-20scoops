@@ -36,7 +36,7 @@ const GoogleRedirect = ({ history }) => {
         setIsLoggedIn(true);
       })
       .catch(error => {
-        setError(error.message);
+        setError({ text: error.message, lastUpdated: Date.now() });
       });
   };
 

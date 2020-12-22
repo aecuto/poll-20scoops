@@ -11,6 +11,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import firebase from 'services/firebase';
 
 import { setLocalStorage, getLocalStorage } from 'utils/localStorage';
+import { useContextAuthManager } from 'components/Auth/AuthManager';
+import Snackbar from 'components/Snackbar';
 
 const SignIn = ({ theme, history }) => {
   const muiTheme = createMuiTheme({
@@ -21,10 +23,10 @@ const SignIn = ({ theme, history }) => {
     }
   });
 
-  const googleState = getLocalStorage('googleState');
+  const { error } = useContextAuthManager();
 
   useEffect(() => {
-    if (googleState) {
+    if (getLocalStorage('googleState')) {
       history.push(routeUrlProvider.getForLink(GOOGLE_REDIRECT));
     }
   }, []);
@@ -49,6 +51,7 @@ const SignIn = ({ theme, history }) => {
     >
       <CssBaseline />
       <SignInView googleSignIn={googleSignIn} />
+      <Snackbar message={error} severity="error" autoHideDuration={5000} />
     </ThemeProvider>
   );
 };

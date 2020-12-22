@@ -17,7 +17,7 @@ const AuthManager = ({ children, history }) => {
   const token = getToken();
   const [isLoggedIn, setIsLoggedIn] = useState(token ? true : false);
   const [userInfo, setUserInfo] = useState({});
-  const [error, setError] = useState('');
+  const [error, setError] = useState({});
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -25,14 +25,12 @@ const AuthManager = ({ children, history }) => {
     if (token) {
       setIsLoading(true);
       firebase.auth().onAuthStateChanged(user => {
-        if (user) {
+        if (user && check20scoopsUser(user)) {
+          presence(user);
+          getUserInfo(user.uid);
+
           setIsLoggedIn(true);
           setUserInfo(user);
-
-          if (user.uid) {
-            presence(user);
-            getUserInfo(user.uid);
-          }
 
           firebase.database().goOnline();
         } else {
@@ -40,19 +38,23 @@ const AuthManager = ({ children, history }) => {
           removeToken();
 
           firebase.database().goOffline();
+          setIsLoading(false);
         }
       });
     }
   }, [history, token]);
 
-  // const check20scoopsUser = user => {
-  //   const email = user.email.split('@');
-  //   if (email[1] !== '20scoops.com') {
-  //     setError('Please login with @20scoops');
-  //     return false;
-  //   }
-  //   return true;
-  // };
+  const check20scoopsUser = user => {
+    const email = user.email.split('@');
+    if (email[1] !== '20scoops.com') {
+      setError({
+        text: 'Please login with @20scoops',
+        lastUpdated: Date.now()
+      });
+      return false;
+    }
+    return true;
+  };
 
   const userState = (state, user) => ({
     email: user.email,
