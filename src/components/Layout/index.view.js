@@ -28,7 +28,8 @@ const LayoutView = ({
   changeMode,
   handleDrawerOpen,
   handleDrawerClose,
-  drawerOpen
+  drawerOpen,
+  menu
 }) => {
   const classes = useStyles();
 
@@ -36,15 +37,17 @@ const LayoutView = ({
     firebase.auth().signOut();
   };
 
-  const drawer = (
-    <div>
-      <ListItem>
-        <ListItemText primary="Poll 20scoops" secondary="@OKRs" />
-      </ListItem>
-      <Divider />
-      <Menu />
-    </div>
-  );
+  const drawer = menu => {
+    return (
+      <div>
+        <ListItem>
+          <ListItemText primary="Poll 20scoops" secondary="@OKRs" />
+        </ListItem>
+        <Divider />
+        <Menu menu={menu} />
+      </div>
+    );
+  };
 
   return (
     <div className={classes.root}>
@@ -83,7 +86,7 @@ const LayoutView = ({
               keepMounted: true // Better open performance on mobile.
             }}
           >
-            {drawer}
+            {drawer(menu)}
           </Drawer>
         </Hidden>
         <Hidden xsDown implementation="css">
@@ -94,7 +97,7 @@ const LayoutView = ({
             variant="permanent"
             open
           >
-            {drawer}
+            {drawer(menu)}
           </Drawer>
         </Hidden>
       </nav>
@@ -112,10 +115,8 @@ LayoutView.propTypes = {
   children: PropTypes.any,
   drawerOpen: PropTypes.any,
   handleDrawerClose: PropTypes.any,
-  handleDrawerOpen: PropTypes.any,
-  label: PropTypes.any,
-  menuLink: PropTypes.func,
-  menuSelected: PropTypes.any,
+  handleDrawerOpen: PropTypes.func,
+  menu: PropTypes.any,
   themeMode: PropTypes.string
 };
 

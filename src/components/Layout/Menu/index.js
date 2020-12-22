@@ -11,17 +11,17 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 
 import routeUrlProvider, { VOTE_LIST, POLL_LIST } from 'constants/route-paths';
 
-import { setLocalStorage, getLocalStorage } from 'utils/localStorage';
-
 import { useContextAuthManager } from 'components/Auth/AuthManager';
 
-const Component = ({ history }) => {
-  const menuSelected = getLocalStorage('menuSelected') || 'VOTE_LIST';
+const Component = ({ history, menu }) => {
   const { isAdmin } = useContextAuthManager();
 
   const menuLink = path => {
-    setLocalStorage('menuSelected', path);
     history.push(routeUrlProvider.getForLink(path));
+  };
+
+  const activeMenu = path => {
+    return menu === path;
   };
 
   return (
@@ -29,7 +29,7 @@ const Component = ({ history }) => {
       <ListItem
         button
         onClick={() => menuLink(VOTE_LIST)}
-        selected={menuSelected === VOTE_LIST}
+        selected={activeMenu(VOTE_LIST)}
       >
         <ListItemIcon>
           <ThumbUpIcon />
@@ -40,7 +40,7 @@ const Component = ({ history }) => {
         <ListItem
           button
           onClick={() => menuLink(POLL_LIST)}
-          selected={menuSelected === POLL_LIST}
+          selected={activeMenu(POLL_LIST)}
         >
           <ListItemIcon>
             <DashboardIcon />
@@ -53,7 +53,8 @@ const Component = ({ history }) => {
 };
 
 Component.propTypes = {
-  history: PropTypes.object
+  history: PropTypes.object,
+  menu: PropTypes.any
 };
 
 export default withRouter(Component);

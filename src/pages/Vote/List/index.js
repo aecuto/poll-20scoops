@@ -5,7 +5,10 @@ import styled from 'styled-components';
 import Layout from 'components/Layout';
 
 import { db } from 'services/share-poll';
-import routeUrlProvider, { VOTE_ANSWER } from 'constants/route-paths';
+import routeUrlProvider, {
+  VOTE_ANSWER,
+  VOTE_LIST
+} from 'constants/route-paths';
 
 import MuiPaper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -63,7 +66,7 @@ const Component = ({ history }) => {
   };
 
   return (
-    <Layout>
+    <Layout menu={VOTE_LIST}>
       <Grid container spacing={3}>
         {isLoading ? null : renderEmpty()}
         {list.map((data, index) => (

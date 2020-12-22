@@ -4,18 +4,13 @@ import Layout from 'components/Layout';
 
 import Button from '@material-ui/core/Button';
 
-import { setLocalStorage } from 'utils/localStorage';
-
 import routeUrlProvider, { VOTE_LIST } from 'constants/route-paths';
 import { withRouter } from 'react-router-dom';
 
 import NoEncryptionIcon from '@material-ui/icons/NoEncryption';
 
 const Component = ({ history }) => {
-  setLocalStorage('menuSelected', 'empty');
-
   const onBack = () => {
-    setLocalStorage('menuSelected', VOTE_LIST);
     history.push(routeUrlProvider.getForLink(VOTE_LIST));
   };
 

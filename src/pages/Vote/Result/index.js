@@ -13,6 +13,7 @@ import Button from '@material-ui/core/Button';
 
 import LinearProgress from './LinearProgress';
 import styled from 'styled-components';
+import { VOTE_LIST } from 'constants/route-paths';
 
 const Space = styled.div`
   margin-bottom: 20px;
@@ -81,7 +82,7 @@ const Component = ({ match, history }) => {
     );
   };
 
-  return <Layout>{data.title ? renderData() : null}</Layout>;
+  return <Layout menu={VOTE_LIST}>{data.title ? renderData() : null}</Layout>;
 };
 
 Component.propTypes = {

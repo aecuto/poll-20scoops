@@ -21,6 +21,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import theme from 'styles/muiTheme';
 
 import routeUrlProvider, {
+  POLL_LIST,
   POLL_SAVE,
   VOTE_RESULT
 } from 'constants/route-paths';
@@ -118,7 +119,7 @@ const Component = ({ history }) => {
   }
 
   return (
-    <Layout>
+    <Layout menu={POLL_LIST}>
       <Snackbar message={message} severity="success" autoHideDuration={5000} />
 
       <Grid container>

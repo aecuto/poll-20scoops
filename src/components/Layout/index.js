@@ -10,7 +10,7 @@ import { setLocalStorage, getLocalStorage } from 'utils/localStorage';
 import Snackbar from 'components/Snackbar';
 import { useContextAuthManager } from 'components/Auth/AuthManager';
 
-const Layout = ({ children }) => {
+const Layout = ({ children, menu }) => {
   const { error } = useContextAuthManager();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -56,7 +56,8 @@ const Layout = ({ children }) => {
     changeMode,
     handleDrawerOpen,
     handleDrawerClose,
-    drawerOpen
+    drawerOpen,
+    menu
   };
 
   const { palette, overrides } = muiTheme(themeMode);
@@ -81,9 +82,7 @@ const Layout = ({ children }) => {
 
 Layout.propTypes = {
   children: PropTypes.any,
-  history: PropTypes.object,
-  label: PropTypes.any,
-  location: PropTypes.any
+  menu: PropTypes.any
 };
 
 export default Layout;

@@ -125,7 +125,9 @@ const Component = ({ match, history }) => {
     );
   };
 
-  return <Layout>{data.title ? renderVoteAnswer() : null}</Layout>;
+  return (
+    <Layout menu={VOTE_LIST}>{data.title ? renderVoteAnswer() : null}</Layout>
+  );
 };
 
 Component.propTypes = {

@@ -23,7 +23,7 @@ import TextField from 'components/FinalForm/TextField';
 import Snackbar from 'components/Snackbar';
 
 import { reqCreate, reqGet, reqDelete, reqUpdate } from 'services/poll';
-import routeUrlProvider, { POLL_SAVE, POLL_LIST } from 'constants/route-paths';
+import routeUrlProvider, { POLL_LIST, POLL_SAVE } from 'constants/route-paths';
 import { compact } from 'lodash';
 import { required } from 'utils/form/validators';
 
@@ -97,7 +97,7 @@ const Component = ({ match, history }) => {
   };
 
   return (
-    <Layout>
+    <Layout menu={POLL_LIST}>
       <Snackbar message={message} severity="success" />
       <Paper>
         <Grid container style={{ marginBottom: '20px' }}>
