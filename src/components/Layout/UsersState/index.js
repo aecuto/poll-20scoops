@@ -10,11 +10,9 @@ import Dialog from '@material-ui/core/Dialog';
 
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 
-import { useContextAuthManager } from 'components/Auth/AuthManager';
 import firebase from 'services/firebase';
 
 const UsersState = () => {
-  const { userInfo } = useContextAuthManager();
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -37,15 +35,6 @@ const UsersState = () => {
         setUsers(users);
       });
   };
-
-  // const getUserInfo = user => {
-  //   const userRealtimeDb = firebase.database().ref(`/users/${user.uid}`);
-
-  //   userRealtimeDb.on('value', snapshot => {
-  //     const data = snapshot.val();
-  //     setUserInfo(data);
-  //   });
-  // };
 
   const [open, setOpen] = useState(false);
 

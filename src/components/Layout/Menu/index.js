@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 
 import List from '@material-ui/core/List';
@@ -13,8 +13,27 @@ import routeUrlProvider, { VOTE_LIST, POLL_LIST } from 'constants/route-paths';
 
 import { setLocalStorage, getLocalStorage } from 'utils/localStorage';
 
+import firebase from 'services/firebase';
+import { useContextAuthManager } from 'components/Auth/AuthManager';
+
 const Component = ({ history }) => {
   const menuSelected = getLocalStorage('menuSelected') || 'VOTE_LIST';
+  const { userInfo } = useContextAuthManager();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    if (userInfo.uid) {
+      getUserInfo(userInfo.uid);
+    }
+  }, [userInfo]);
+
+  const getUserInfo = userId => {
+    const userRealtimeDb = firebase.database().ref(`/users/${userId}`);
+
+    userRealtimeDb.once('value').then(snapshot => {
+      setIsAdmin(snapshot.val().role === 'admin');
+    });
+  };
 
   const menuLink = path => {
     setLocalStorage('menuSelected', path);
@@ -33,16 +52,18 @@ const Component = ({ history }) => {
         </ListItemIcon>
         <ListItemText primary="Vote Polls" />
       </ListItem>
-      <ListItem
-        button
-        onClick={() => menuLink(POLL_LIST)}
-        selected={menuSelected === POLL_LIST}
-      >
-        <ListItemIcon>
-          <DashboardIcon />
-        </ListItemIcon>
-        <ListItemText primary="Poll List" />
-      </ListItem>
+      {isAdmin && (
+        <ListItem
+          button
+          onClick={() => menuLink(POLL_LIST)}
+          selected={menuSelected === POLL_LIST}
+        >
+          <ListItemIcon>
+            <DashboardIcon />
+          </ListItemIcon>
+          <ListItemText primary="Poll List" />
+        </ListItem>
+      )}
     </List>
   );
 };
