@@ -13,27 +13,11 @@ import routeUrlProvider, { VOTE_LIST, POLL_LIST } from 'constants/route-paths';
 
 import { setLocalStorage, getLocalStorage } from 'utils/localStorage';
 
-import firebase from 'services/firebase';
 import { useContextAuthManager } from 'components/Auth/AuthManager';
 
 const Component = ({ history }) => {
   const menuSelected = getLocalStorage('menuSelected') || 'VOTE_LIST';
-  const { userInfo } = useContextAuthManager();
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  useEffect(() => {
-    if (userInfo.uid) {
-      getUserInfo(userInfo.uid);
-    }
-  }, [userInfo]);
-
-  const getUserInfo = userId => {
-    const userRealtimeDb = firebase.database().ref(`/users/${userId}`);
-
-    userRealtimeDb.once('value').then(snapshot => {
-      setIsAdmin(snapshot.val().role === 'admin');
-    });
-  };
+  const { isAdmin } = useContextAuthManager();
 
   const menuLink = path => {
     setLocalStorage('menuSelected', path);

@@ -8,6 +8,9 @@ import routeUrlProvider, { SIGN_IN, VOTE_LIST } from 'constants/route-paths';
 import firebase from 'services/firebase';
 import { getToken, removeToken } from 'services/auth/token';
 
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 export const AuthManagerContext = createContext({});
 
 const AuthManager = ({ children, history }) => {
@@ -15,9 +18,12 @@ const AuthManager = ({ children, history }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(token ? true : false);
   const [userInfo, setUserInfo] = useState({});
   const [error, setError] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (token) {
+      setIsLoading(true);
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
           setIsLoggedIn(true);
@@ -25,6 +31,7 @@ const AuthManager = ({ children, history }) => {
 
           if (user.uid) {
             presence(user);
+            getUserInfo(user.uid);
           }
 
           firebase.database().goOnline();
@@ -74,6 +81,23 @@ const AuthManager = ({ children, history }) => {
       });
   };
 
+  const getUserInfo = userId => {
+    const userRealtimeDb = firebase.database().ref(`/users/${userId}`);
+
+    userRealtimeDb.once('value').then(snapshot => {
+      setIsAdmin(snapshot.val().role === 'admin');
+      setIsLoading(false);
+    });
+  };
+
+  const rederLoading = () => {
+    return (
+      <Backdrop open style={{ backgroundColor: 'inherit' }}>
+        <CircularProgress thickness={5} size={60} />
+      </Backdrop>
+    );
+  };
+
   return (
     <AuthManagerContext.Provider
       value={{
@@ -81,7 +105,8 @@ const AuthManager = ({ children, history }) => {
         setUserInfo,
         setIsLoggedIn,
         error,
-        setError
+        setError,
+        isAdmin
       }}
     >
       <AuthRouter
@@ -90,7 +115,7 @@ const AuthManager = ({ children, history }) => {
         publicKickTo={routeUrlProvider.getForRoute(VOTE_LIST)}
         isVerifying={false}
       >
-        {children}
+        {isLoading ? rederLoading() : children}
       </AuthRouter>
     </AuthManagerContext.Provider>
   );

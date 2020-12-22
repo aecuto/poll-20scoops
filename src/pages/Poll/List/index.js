@@ -27,6 +27,9 @@ import { reqShare } from 'services/share-poll';
 
 import Snackbar from 'components/Snackbar';
 import { omit } from 'lodash';
+import { useContextAuthManager } from 'components/Auth/AuthManager';
+
+import PermissionDeny from '../PermissionDeny';
 
 const Paper = styled(MuiPaper)`
   && {
@@ -42,6 +45,8 @@ const Divider = styled(MuiDivider)`
 `;
 
 const Component = ({ history }) => {
+  const { isAdmin } = useContextAuthManager();
+
   const [list, setList] = useState([]);
   const [message, setMessage] = useState({});
   const [search, setSearch] = useState('');
@@ -88,6 +93,10 @@ const Component = ({ history }) => {
       });
     });
   };
+
+  if (!isAdmin) {
+    return <PermissionDeny />;
+  }
 
   return (
     <Layout>
