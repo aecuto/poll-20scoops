@@ -21,8 +21,6 @@ const UsersState = () => {
     listenOnline();
   }, []);
 
-  console.log({ users, email: userInfo.email });
-
   const listenOnline = () => {
     firebase
       .database()

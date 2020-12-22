@@ -22,10 +22,11 @@ import routeUrlProvider, {
   POLL_SAVE,
   VOTE_RESULT
 } from 'constants/route-paths';
-import { reqList } from 'services/poll';
+import { reqList, reqGet, reqCreate } from 'services/poll';
 import { reqShare } from 'services/share-poll';
 
 import Snackbar from 'components/Snackbar';
+import { omit } from 'lodash';
 
 const Paper = styled(MuiPaper)`
   && {
@@ -44,10 +45,11 @@ const Component = ({ history }) => {
   const [list, setList] = useState([]);
   const [message, setMessage] = useState({});
   const [search, setSearch] = useState('');
+  const [lastChange, setLastChange] = useState(Date.now());
 
   useEffect(() => {
     reqList().then(list => setList(list));
-  }, []);
+  }, [lastChange]);
 
   const debounced = useDebouncedCallback(value => {
     setSearch(value);
@@ -72,6 +74,19 @@ const Component = ({ history }) => {
         lastUpdated: Date.now()
       })
     );
+  };
+
+  const onDuplicate = pollId => {
+    reqGet(pollId).then(data => {
+      const newData = {
+        ...omit(data, 'id'),
+        title: `${data.title} (duplicate)`
+      };
+      reqCreate(newData).then(() => {
+        setMessage({ text: 'Duplicate Success!', lastUpdated: Date.now() });
+        setLastChange(Date.now());
+      });
+    });
   };
 
   return (
@@ -118,6 +133,17 @@ const Component = ({ history }) => {
                   </Grid>
 
                   <Grid item xs={12} style={{ textAlign: 'right' }}>
+                    <Button
+                      variant="contained"
+                      style={{ marginRight: '10px' }}
+                      onClick={event => {
+                        event.stopPropagation();
+                        onDuplicate(data.id);
+                      }}
+                      color="primary"
+                    >
+                      Duplicate
+                    </Button>
                     <Button
                       variant="contained"
                       style={{ marginRight: '10px' }}
