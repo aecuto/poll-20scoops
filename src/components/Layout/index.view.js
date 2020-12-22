@@ -20,6 +20,7 @@ import firebase from 'services/firebase';
 
 import useStyles from './useStyles';
 import Menu from './Menu';
+import UsersState from './UsersState';
 
 const LayoutView = ({
   children,
@@ -59,6 +60,7 @@ const LayoutView = ({
             <MenuIcon />
           </IconButton>
           <div style={{ flexGrow: '1' }} />
+          <UsersState />
           <IconButton color="inherit" onClick={() => changeMode()}>
             {themeMode === 'dark' ? <Brightness4Icon /> : <FlareIcon />}
           </IconButton>

@@ -15,17 +15,18 @@ const AuthManager = ({ children, history }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(token ? true : false);
   const [userInfo, setUserInfo] = useState({});
   const [error, setError] = useState('');
-  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     if (token) {
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
-          setUserInfo(user);
           setIsLoggedIn(true);
+          setUserInfo(user);
 
-          presence(user);
-          listenOnline();
+          if (user.uid) {
+            presence(user);
+          }
+
           firebase.database().goOnline();
         } else {
           setIsLoggedIn(false);
@@ -55,13 +56,7 @@ const AuthManager = ({ children, history }) => {
   });
 
   const presence = user => {
-    if (!user.uid) {
-      return;
-    }
-
-    const userId = user.uid;
-
-    const userRealtimeDb = firebase.database().ref(`/users/${userId}`);
+    const userRealtimeDb = firebase.database().ref(`/users/${user.uid}`);
 
     firebase
       .database()
@@ -72,38 +67,10 @@ const AuthManager = ({ children, history }) => {
         }
         userRealtimeDb
           .onDisconnect()
-          .set(userState('offline', user))
+          .update(userState('offline', user))
           .then(() => {
-            userRealtimeDb.set(userState('online', user));
+            userRealtimeDb.update(userState('online', user));
           });
-      });
-  };
-
-  const listenOnline = () => {
-    firebase
-      .database()
-      .ref(`/users`)
-      .orderByChild('lastChanged')
-      .on('value', function(snapshot) {
-        const users = [];
-
-        snapshot.forEach(function(childSnapshot) {
-          const childData = childSnapshot.val();
-          users.push(childData);
-        });
-
-        const mockUser = [];
-        for (let i = 0; i < 10; i += 1) {
-          mockUser.push({
-            displayName: 'test user',
-            photoURL: null,
-            state: 'offline',
-            lastChanged: Date.now()
-          });
-        }
-        const testUser = [...users, ...mockUser];
-
-        setUsers(testUser);
       });
   };
 
@@ -111,10 +78,10 @@ const AuthManager = ({ children, history }) => {
     <AuthManagerContext.Provider
       value={{
         userInfo,
+        setUserInfo,
         setIsLoggedIn,
-        setError,
         error,
-        users
+        setError
       }}
     >
       <AuthRouter

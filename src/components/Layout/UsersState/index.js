@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
@@ -11,9 +11,43 @@ import Dialog from '@material-ui/core/Dialog';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 
 import { useContextAuthManager } from 'components/Auth/AuthManager';
+import firebase from 'services/firebase';
 
 const UsersState = () => {
-  const { users } = useContextAuthManager();
+  const { userInfo } = useContextAuthManager();
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    listenOnline();
+  }, []);
+
+  console.log({ users, email: userInfo.email });
+
+  const listenOnline = () => {
+    firebase
+      .database()
+      .ref(`/users`)
+      .orderByChild('lastChanged')
+      .on('value', snapshot => {
+        const users = [];
+
+        snapshot.forEach(childSnapshot => {
+          const childData = childSnapshot.val();
+          users.push(childData);
+        });
+
+        setUsers(users);
+      });
+  };
+
+  // const getUserInfo = user => {
+  //   const userRealtimeDb = firebase.database().ref(`/users/${user.uid}`);
+
+  //   userRealtimeDb.on('value', snapshot => {
+  //     const data = snapshot.val();
+  //     setUserInfo(data);
+  //   });
+  // };
 
   const [open, setOpen] = useState(false);
 
