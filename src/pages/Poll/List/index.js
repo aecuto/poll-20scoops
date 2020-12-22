@@ -13,10 +13,12 @@ import IconButton from '@material-ui/core/IconButton';
 import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import Button from '@material-ui/core/Button';
+import MuiButton from '@material-ui/core/Button';
 
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import SearchIcon from '@material-ui/icons/Search';
+
+import theme from 'styles/muiTheme';
 
 import routeUrlProvider, {
   POLL_SAVE,
@@ -30,6 +32,21 @@ import { omit } from 'lodash';
 import { useContextAuthManager } from 'components/Auth/AuthManager';
 
 import PermissionDeny from '../PermissionDeny';
+
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import EmojiEventsRoundedIcon from '@material-ui/icons/EmojiEventsRounded';
+import ShareIcon from '@material-ui/icons/Share';
+
+const Button = styled(MuiButton)`
+  && {
+    margin-right: 10px;
+    .MuiButton-startIcon {
+      margin-right: ${({ iconrange }) => iconrange}px;
+    }
+  }
+`;
 
 const Paper = styled(MuiPaper)`
   && {
@@ -51,6 +68,8 @@ const Component = ({ history }) => {
   const [message, setMessage] = useState({});
   const [search, setSearch] = useState('');
   const [lastChange, setLastChange] = useState(Date.now());
+
+  const matches = useMediaQuery(theme.breakpoints.up('md'));
 
   useEffect(() => {
     reqList().then(list => setList(list));
@@ -135,33 +154,33 @@ const Component = ({ history }) => {
             <Grid item xs={12} key={data.id}>
               <Paper onClick={() => onUpdate(data.id)}>
                 <Grid container spacing={3}>
-                  <Grid item xs={12}>
-                    <Typography variant="h3">
-                      {`#${index + 1}. `} {data.title}
-                    </Typography>
-                  </Grid>
+                  <Typography variant="h3">
+                    {`#${index + 1}. `} {data.title}
+                  </Typography>
 
                   <Grid item xs={12} style={{ textAlign: 'right' }}>
                     <Button
                       variant="contained"
-                      style={{ marginRight: '10px' }}
                       onClick={event => {
                         event.stopPropagation();
                         onDuplicate(data.id);
                       }}
                       color="primary"
+                      startIcon={<FileCopyIcon />}
+                      iconrange={matches ? 8 : 0}
                     >
-                      Duplicate
+                      {matches ? 'Duplicate' : ''}
                     </Button>
                     <Button
                       variant="contained"
-                      style={{ marginRight: '10px' }}
                       onClick={event => {
                         event.stopPropagation();
                         onResult(data.id);
                       }}
+                      startIcon={<EmojiEventsRoundedIcon />}
+                      iconrange={matches ? 8 : 0}
                     >
-                      Result
+                      {matches ? 'Result' : ''}
                     </Button>
                     <Button
                       variant="contained"
@@ -170,8 +189,10 @@ const Component = ({ history }) => {
                         event.stopPropagation();
                         onShare(data);
                       }}
+                      startIcon={<ShareIcon />}
+                      iconrange={matches ? 8 : 0}
                     >
-                      Share
+                      {matches ? 'Share' : ''}
                     </Button>
                   </Grid>
                 </Grid>

@@ -12,6 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
 import TimeAgo from 'react-timeago';
+import AccessAlarmRoundedIcon from '@material-ui/icons/AccessAlarmRounded';
 
 const Paper = styled(MuiPaper)`
   && {
@@ -22,8 +23,10 @@ const Paper = styled(MuiPaper)`
 
 const Component = ({ history }) => {
   const [list, setList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     db.orderBy('created_at', 'desc')
       .limit(5)
       .onSnapshot(querySnapshot => {
@@ -32,6 +35,7 @@ const Component = ({ history }) => {
           list.push(doc.data());
         });
         setList(list);
+        setIsLoading(false);
       });
   }, []);
 
@@ -39,9 +43,29 @@ const Component = ({ history }) => {
     history.push(routeUrlProvider.getForLink(VOTE_ANSWER, { pollId }));
   };
 
+  const renderEmpty = () => {
+    return (
+      <>
+        {!list.length && (
+          <Grid item xs={12}>
+            <MuiPaper variant="outlined" square style={{ padding: '20px' }}>
+              <Grid container justify="center">
+                <AccessAlarmRoundedIcon style={{ fontSize: '50px' }} />
+                <Typography variant="h5" style={{ marginTop: '10px' }}>
+                  Waiting for polls sharing...
+                </Typography>
+              </Grid>
+            </MuiPaper>
+          </Grid>
+        )}
+      </>
+    );
+  };
+
   return (
     <Layout>
       <Grid container spacing={3}>
+        {isLoading ? null : renderEmpty()}
         {list.map((data, index) => (
           <Grid item xs={12} key={index}>
             <Paper
