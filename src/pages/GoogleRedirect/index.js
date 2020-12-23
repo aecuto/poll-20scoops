@@ -21,9 +21,11 @@ const GoogleRedirect = ({ history }) => {
   useEffect(() => {
     removeLocalStorage('googleState');
     googleSignInResult();
-    setInterval(() => {
+    const timer = setInterval(() => {
       timeOutSignIn();
     }, 1000 * 10);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const googleSignInResult = () => {
