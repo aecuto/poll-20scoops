@@ -34,9 +34,7 @@ const Component = ({ percentage, label, count }) => {
   const { t } = useTranslation();
   return (
     <Wraper>
-      <Typography variant="h5">{`${label} (${count} ${t(
-        'votes'
-      )})`}</Typography>
+      <Typography>{`${label} (${count} ${t('votes')})`}</Typography>
       <LinearProgress variant="determinate" value={percentage * 100} />
       <LinearProgressText>{formatPercent(percentage)}</LinearProgressText>
     </Wraper>

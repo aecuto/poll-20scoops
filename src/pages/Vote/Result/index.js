@@ -49,7 +49,7 @@ const Component = ({ match, history }) => {
     return (
       <Paper style={{ padding: '20px' }}>
         <Grid container justify="center">
-          <Typography variant="h1">{data.title}</Typography>
+          <Typography variant="h6">{data.title}</Typography>
         </Grid>
         <Grid container justify="center">
           <Typography>{`(${data.total} total votes)`}</Typography>
