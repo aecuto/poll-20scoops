@@ -88,10 +88,12 @@ const AuthManager = ({ children, history }) => {
   const getUserInfo = userId => {
     const userRealtimeDb = firebase.database().ref(`/users/${userId}`);
 
-    userRealtimeDb.once('value').then(snapshot => {
-      setIsAdmin(snapshot.val().role === 'admin');
-      setIsLoading(false);
-    });
+    userRealtimeDb
+      .once('value')
+      .then(snapshot => {
+        setIsAdmin(snapshot.val().role === 'admin');
+      })
+      .finally(() => setIsLoading(false));
   };
 
   const rederLoading = () => {
