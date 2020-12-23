@@ -13,12 +13,9 @@ import IconButton from '@material-ui/core/IconButton';
 import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import MuiButton from '@material-ui/core/Button';
 
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import SearchIcon from '@material-ui/icons/Search';
-
-import theme from 'styles/muiTheme';
 
 import routeUrlProvider, {
   POLL_LIST,
@@ -29,26 +26,16 @@ import { reqList, reqGet, reqCreate } from 'services/poll';
 import { reqShare } from 'services/share-poll';
 
 import Snackbar from 'components/Snackbar';
+import Button from 'components/Button';
 import { omit } from 'lodash';
 import { useContextAuthManager } from 'components/Auth/AuthManager';
 
 import PermissionDeny from '../PermissionDeny';
 
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import EmojiEventsRoundedIcon from '@material-ui/icons/EmojiEventsRounded';
 import ShareIcon from '@material-ui/icons/Share';
 import { useTranslation } from 'react-i18next';
-
-const Button = styled(MuiButton)`
-  && {
-    margin-right: 10px;
-    .MuiButton-startIcon {
-      margin-right: ${({ iconrange }) => iconrange}px;
-    }
-  }
-`;
 
 const Paper = styled(MuiPaper)`
   && {
@@ -71,8 +58,6 @@ const Component = ({ history }) => {
   const [message, setMessage] = useState({});
   const [search, setSearch] = useState('');
   const [lastChange, setLastChange] = useState(Date.now());
-
-  const matches = useMediaQuery(theme.breakpoints.up('md'));
 
   useEffect(() => {
     reqList().then(list => setList(list));
@@ -163,40 +148,31 @@ const Component = ({ history }) => {
 
                   <Grid item xs={12} style={{ textAlign: 'right' }}>
                     <Button
-                      variant="contained"
+                      color="primary"
                       onClick={event => {
                         event.stopPropagation();
                         onDuplicate(data.id);
                       }}
-                      color="primary"
                       startIcon={<FileCopyIcon />}
-                      iconrange={matches ? 8 : 0}
-                    >
-                      {matches ? t('duplicate') : ''}
-                    </Button>
+                      text={t('duplicate')}
+                    />
                     <Button
-                      variant="contained"
                       onClick={event => {
                         event.stopPropagation();
                         onResult(data.id);
                       }}
                       startIcon={<EmojiEventsRoundedIcon />}
-                      iconrange={matches ? 8 : 0}
-                    >
-                      {matches ? t('result') : ''}
-                    </Button>
+                      text={t('result')}
+                    />
                     <Button
-                      variant="contained"
                       color="secondary"
                       onClick={event => {
                         event.stopPropagation();
                         onShare(data);
                       }}
                       startIcon={<ShareIcon />}
-                      iconrange={matches ? 8 : 0}
-                    >
-                      {matches ? t('share') : ''}
-                    </Button>
+                      text={t('share')}
+                    />
                   </Grid>
                 </Grid>
               </Paper>

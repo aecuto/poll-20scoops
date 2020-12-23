@@ -12,7 +12,7 @@ import MuiPaper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
-import Button from '@material-ui/core/Button';
+import Button from 'components/Button';
 
 import Radio from 'components/FinalForm/Radio';
 import routeUrlProvider, {
@@ -21,6 +21,10 @@ import routeUrlProvider, {
 } from 'constants/route-paths';
 import { useContextAuthManager } from 'components/Auth/AuthManager';
 import { useTranslation } from 'react-i18next';
+
+import EmojiEventsRoundedIcon from '@material-ui/icons/EmojiEventsRounded';
+import ThumbUpAltRoundedIcon from '@material-ui/icons/ThumbUpAltRounded';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 const Paper = styled(MuiPaper)`
   && {
@@ -91,31 +95,25 @@ const Component = ({ match, history }) => {
                   <Divider style={{ marginBottom: '20px' }} />
 
                   <Grid container>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} style={{ textAlign: 'right' }}>
                       <Button
                         type="submit"
-                        variant="contained"
                         color="primary"
                         disabled={pristine || submitting || isDiabled}
-                        fullWidth
-                        style={{ marginBottom: '10px' }}
-                      >
-                        {t('vote')}
-                      </Button>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Button variant="contained" onClick={() => onResult()}>
-                        {t('result')}
-                      </Button>
-                    </Grid>
-                    <Grid item xs={6} style={{ textAlign: 'right' }}>
+                        text={t('vote')}
+                        startIcon={<ThumbUpAltRoundedIcon />}
+                      />
                       <Button
-                        variant="contained"
+                        onClick={() => onResult()}
+                        text={t('result')}
+                        startIcon={<EmojiEventsRoundedIcon />}
+                      />
+                      <Button
                         onClick={() => onBack()}
                         color="secondary"
-                      >
-                        {t('back')}
-                      </Button>
+                        text={t('back')}
+                        startIcon={<ArrowBackIcon />}
+                      />
                     </Grid>
                   </Grid>
                 </form>
