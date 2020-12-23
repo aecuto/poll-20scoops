@@ -24,7 +24,7 @@ import Snackbar from 'components/Snackbar';
 
 import { reqCreate, reqGet, reqDelete, reqUpdate } from 'services/poll';
 import routeUrlProvider, { POLL_LIST, POLL_SAVE } from 'constants/route-paths';
-import { compact } from 'lodash';
+import { compact, filter, isEmpty } from 'lodash';
 import { required } from 'utils/form/validators';
 import { useTranslation } from 'react-i18next';
 
@@ -42,6 +42,12 @@ const Paper = styled(MuiPaper)`
   }
 `;
 
+const filterAnswer = array => {
+  const data = compact(array);
+
+  return filter(data, value => !isEmpty(value));
+};
+
 const Component = ({ match, history }) => {
   const { t } = useTranslation();
   const { pollId } = match.params;
@@ -57,7 +63,7 @@ const Component = ({ match, history }) => {
   }, [pollId]);
 
   const onSubmit = values => {
-    const data = { ...values, answer: compact(values.answer) };
+    const data = { ...values, answer: filterAnswer(values.answer) };
 
     if (isCreate) {
       return reqCreate(data).then(doc => {
@@ -86,7 +92,7 @@ const Component = ({ match, history }) => {
   };
 
   const validateAnswer = value => {
-    if (!compact(value).length) {
+    if (!filterAnswer(value).length) {
       return 'required';
     }
   };
