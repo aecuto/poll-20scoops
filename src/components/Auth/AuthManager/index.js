@@ -10,10 +10,12 @@ import { getToken, removeToken } from 'services/auth/token';
 
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { useTranslation } from 'react-i18next';
 
 export const AuthManagerContext = createContext({});
 
 const AuthManager = ({ children, history }) => {
+  const { t } = useTranslation();
   const token = getToken();
   const [isLoggedIn, setIsLoggedIn] = useState(token ? true : false);
   const [userInfo, setUserInfo] = useState({});
@@ -48,7 +50,7 @@ const AuthManager = ({ children, history }) => {
     const email = user.email.split('@');
     if (email[1] !== '20scoops.com') {
       setError({
-        text: 'Please login with @20scoops',
+        text: t('sign_with_20scoops'),
         lastUpdated: Date.now()
       });
       return false;

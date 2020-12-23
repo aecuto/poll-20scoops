@@ -5,6 +5,7 @@ import MuiLinearProgress from '@material-ui/core/LinearProgress';
 
 import Typography from '@material-ui/core/Typography';
 import { formatPercent } from 'utils/numeral';
+import { useTranslation } from 'react-i18next';
 
 const Wraper = styled.div`
   position: relative;
@@ -30,9 +31,12 @@ const LinearProgressText = styled(Typography)`
 `;
 
 const Component = ({ percentage, label, count }) => {
+  const { t } = useTranslation();
   return (
     <Wraper>
-      <Typography variant="h5">{`${label} (${count} votes)`}</Typography>
+      <Typography variant="h5">{`${label} (${count} ${t(
+        'votes'
+      )})`}</Typography>
       <LinearProgress variant="determinate" value={percentage * 100} />
       <LinearProgressText>{formatPercent(percentage)}</LinearProgressText>
     </Wraper>

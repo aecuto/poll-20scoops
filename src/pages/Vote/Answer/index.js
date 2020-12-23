@@ -20,6 +20,7 @@ import routeUrlProvider, {
   VOTE_RESULT
 } from 'constants/route-paths';
 import { useContextAuthManager } from 'components/Auth/AuthManager';
+import { useTranslation } from 'react-i18next';
 
 const Paper = styled(MuiPaper)`
   && {
@@ -28,6 +29,7 @@ const Paper = styled(MuiPaper)`
 `;
 
 const Component = ({ match, history }) => {
+  const { t } = useTranslation();
   const { pollId } = match.params;
   const { userInfo } = useContextAuthManager();
 
@@ -98,12 +100,12 @@ const Component = ({ match, history }) => {
                         fullWidth
                         style={{ marginBottom: '10px' }}
                       >
-                        Vote
+                        {t('vote')}
                       </Button>
                     </Grid>
                     <Grid item xs={6}>
                       <Button variant="contained" onClick={() => onResult()}>
-                        Result
+                        {t('result')}
                       </Button>
                     </Grid>
                     <Grid item xs={6} style={{ textAlign: 'right' }}>
@@ -112,7 +114,7 @@ const Component = ({ match, history }) => {
                         onClick={() => onBack()}
                         color="secondary"
                       >
-                        Back
+                        {t('back')}
                       </Button>
                     </Grid>
                   </Grid>

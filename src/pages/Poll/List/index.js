@@ -39,6 +39,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import EmojiEventsRoundedIcon from '@material-ui/icons/EmojiEventsRounded';
 import ShareIcon from '@material-ui/icons/Share';
+import { useTranslation } from 'react-i18next';
 
 const Button = styled(MuiButton)`
   && {
@@ -63,6 +64,7 @@ const Divider = styled(MuiDivider)`
 `;
 
 const Component = ({ history }) => {
+  const { t } = useTranslation();
   const { isAdmin } = useContextAuthManager();
 
   const [list, setList] = useState([]);
@@ -95,7 +97,7 @@ const Component = ({ history }) => {
   const onShare = data => {
     reqShare(data.title, data.id).then(() =>
       setMessage({
-        text: `Poll ${data.title} have been shared.`,
+        text: `${data.title} ${t('shared')}`,
         lastUpdated: Date.now()
       })
     );
@@ -108,7 +110,7 @@ const Component = ({ history }) => {
         title: `${data.title} (duplicate)`
       };
       reqCreate(newData).then(() => {
-        setMessage({ text: 'Duplicate Success!', lastUpdated: Date.now() });
+        setMessage({ text: t('duplicate_success'), lastUpdated: Date.now() });
         setLastChange(Date.now());
       });
     });
@@ -124,12 +126,12 @@ const Component = ({ history }) => {
 
       <Grid container>
         <Grid item xs={12} md={8}>
-          <Typography variant="h3">List</Typography>
+          <Typography variant="h3">{t('list_title')}</Typography>
         </Grid>
         <Grid item xs={11} md={3}>
           <FormControl fullWidth>
             <Input
-              placeholder="search"
+              placeholder={t('search')}
               startAdornment={
                 <InputAdornment position="start">
                   <SearchIcon />
@@ -170,7 +172,7 @@ const Component = ({ history }) => {
                       startIcon={<FileCopyIcon />}
                       iconrange={matches ? 8 : 0}
                     >
-                      {matches ? 'Duplicate' : ''}
+                      {matches ? t('duplicate') : ''}
                     </Button>
                     <Button
                       variant="contained"
@@ -181,7 +183,7 @@ const Component = ({ history }) => {
                       startIcon={<EmojiEventsRoundedIcon />}
                       iconrange={matches ? 8 : 0}
                     >
-                      {matches ? 'Result' : ''}
+                      {matches ? t('result') : ''}
                     </Button>
                     <Button
                       variant="contained"
@@ -193,7 +195,7 @@ const Component = ({ history }) => {
                       startIcon={<ShareIcon />}
                       iconrange={matches ? 8 : 0}
                     >
-                      {matches ? 'Share' : ''}
+                      {matches ? t('share') : ''}
                     </Button>
                   </Grid>
                 </Grid>

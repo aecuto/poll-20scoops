@@ -26,6 +26,7 @@ import { reqCreate, reqGet, reqDelete, reqUpdate } from 'services/poll';
 import routeUrlProvider, { POLL_LIST, POLL_SAVE } from 'constants/route-paths';
 import { compact } from 'lodash';
 import { required } from 'utils/form/validators';
+import { useTranslation } from 'react-i18next';
 
 const Divider = styled(MuiDivider)`
   && {
@@ -42,6 +43,7 @@ const Paper = styled(MuiPaper)`
 `;
 
 const Component = ({ match, history }) => {
+  const { t } = useTranslation();
   const { pollId } = match.params;
   const isCreate = pollId === 'create';
 
@@ -59,14 +61,14 @@ const Component = ({ match, history }) => {
 
     if (isCreate) {
       return reqCreate(data).then(doc => {
-        setMessage({ text: 'Create Success!', lastUpdated: Date.now() });
+        setMessage({ text: t('create_success'), lastUpdated: Date.now() });
         history.push(
           routeUrlProvider.getForLink(POLL_SAVE, { pollId: doc.id })
         );
       });
     } else {
       return reqUpdate(pollId, data).then(() =>
-        setMessage({ text: 'Update Success!', lastUpdated: Date.now() })
+        setMessage({ text: t('update_success'), lastUpdated: Date.now() })
       );
     }
   };
@@ -103,7 +105,7 @@ const Component = ({ match, history }) => {
         <Grid container style={{ marginBottom: '20px' }}>
           <Grid item xs={6}>
             <Typography variant="h1">
-              {isCreate ? 'Create' : 'Editing'}
+              {isCreate ? t('create') : t('edit')}
             </Typography>
           </Grid>
           <Grid item xs={6} style={{ textAlign: 'right' }}>
@@ -134,17 +136,17 @@ const Component = ({ match, history }) => {
                   <Grid item xs={12}>
                     <Field
                       name="title"
-                      label="Title"
+                      label={t('title')}
                       component={TextField}
-                      validate={required('Title')}
+                      validate={required(t('title'))}
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <Field
                       name="group"
-                      label="Group (ex. okrs-q4-2020)"
+                      label={t('group')}
                       component={TextField}
-                      validate={required('Group')}
+                      validate={required(t('group'))}
                     />
                   </Grid>
                 </Grid>
@@ -155,7 +157,7 @@ const Component = ({ match, history }) => {
                     <FormControl error={Boolean(checkError(meta))} fullWidth>
                       <FormLabel>
                         <Typography gutterBottom>
-                          Answer Options
+                          {t('answer_options')}
                           {checkError(meta) && ` (${checkError(meta)})`}
                         </Typography>
                       </FormLabel>
@@ -164,7 +166,7 @@ const Component = ({ match, history }) => {
                           key={index}
                           name={`${name}.label`}
                           component={TextField}
-                          placeholder={`Answer #${index + 1}`}
+                          placeholder={`${t('answer')} #${index + 1}`}
                           onClick={() => autoAdd(push, values, index)}
                         />
                       ))}
@@ -181,7 +183,7 @@ const Component = ({ match, history }) => {
                     disabled={submitting || pristine}
                     variant="contained"
                   >
-                    Submit
+                    {t('submit')}
                   </Button>
                 </Grid>
               </form>

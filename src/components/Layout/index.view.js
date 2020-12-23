@@ -21,6 +21,7 @@ import firebase from 'services/firebase';
 import useStyles from './useStyles';
 import Menu from './Menu';
 import UsersState from './UsersState';
+import { useTranslation } from 'react-i18next';
 
 const LayoutView = ({
   children,
@@ -31,6 +32,7 @@ const LayoutView = ({
   drawerOpen,
   menu
 }) => {
+  const { t } = useTranslation();
   const classes = useStyles();
 
   const onLogout = () => {
@@ -41,7 +43,10 @@ const LayoutView = ({
     return (
       <div>
         <ListItem>
-          <ListItemText primary="Poll 20scoops" secondary="@OKRs" />
+          <ListItemText
+            primary={t('primary_title')}
+            secondary={t('secondary_title')}
+          />
         </ListItem>
         <Divider />
         <Menu menu={menu} />
