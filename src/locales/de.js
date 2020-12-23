@@ -7,6 +7,7 @@ const de = {
     duplicate_success: 'Doppelte Erfolg!',
     shared: 'haben geteilt.',
     sign_with_20scoops: 'Bitte melden Sie sich mit @ 20scoops',
+    timeout: 'Sorry, Ihre Anmelde-Zeitüberschreitung. Bitte neu anmelden.',
     project_title: 'Poll 20scoops',
     sing_in_title: 'Anmelden',
     sing_in_button: 'Google Anmelden',

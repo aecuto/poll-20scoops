@@ -12,13 +12,18 @@ import { setToken } from 'services/auth/token';
 import firebase from 'services/firebase';
 
 import { useContextAuthManager } from 'components/Auth/AuthManager';
+import { useTranslation } from 'react-i18next';
 
 const GoogleRedirect = ({ history }) => {
+  const { t } = useTranslation();
   const { setIsLoggedIn, setError } = useContextAuthManager();
 
   useEffect(() => {
     removeLocalStorage('googleState');
     googleSignInResult();
+    setInterval(() => {
+      timeOutSignIn();
+    }, 1000 * 10);
   }, []);
 
   const googleSignInResult = () => {
@@ -38,6 +43,11 @@ const GoogleRedirect = ({ history }) => {
       .catch(error => {
         setError({ text: error.message, lastUpdated: Date.now() });
       });
+  };
+
+  const timeOutSignIn = () => {
+    setError({ text: t('timeout'), lastUpdated: Date.now() });
+    history.push(routeUrlProvider.getForLink(SIGN_IN));
   };
 
   return (
