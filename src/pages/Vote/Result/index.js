@@ -9,12 +9,16 @@ import count from '../Result/count';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import Button from 'components/Button';
 
 import LinearProgress from './LinearProgress';
 import styled from 'styled-components';
 import { VOTE_LIST } from 'constants/route-paths';
 import { useTranslation } from 'react-i18next';
+import { getList } from 'services/user';
+import { CSVLink } from 'react-csv';
+import DescriptionIcon from '@material-ui/icons/Description';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 const Space = styled.div`
   margin-bottom: 20px;
@@ -25,6 +29,7 @@ const Component = ({ match, history }) => {
 
   const { pollId } = match.params;
   const [data, setData] = useState({});
+  const [list, setList] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -38,11 +43,35 @@ const Component = ({ match, history }) => {
         list.push(doc.data());
       });
       setData(count(poll, list));
+      setList(list);
     });
   };
 
   const onBack = () => {
     history.goBack();
+  };
+
+  const csvData = () => {
+    const userList = getList();
+
+    const headers = [
+      { label: 'Name', key: 'displayName' },
+      { label: 'Email', key: 'email' },
+      { label: 'Answer', key: 'answer' }
+    ];
+
+    const data = [];
+    list.forEach(value => {
+      const user = userList[value.uid];
+      const newData = {
+        displayName: user.displayName,
+        email: user.email,
+        answer: value.answer
+      };
+      data.push(newData);
+    });
+
+    return { data, headers };
   };
 
   const renderData = () => {
@@ -73,13 +102,25 @@ const Component = ({ match, history }) => {
         <Space />
 
         <Grid container justify="center">
+          <CSVLink
+            data={csvData().data}
+            headers={csvData().headers}
+            filename={`${data.title}-${data.group}.csv`}
+            style={{ textDecoration: 'none' }}
+          >
+            <Button
+              style={{ marginRight: '10px', marginButtom: '10px' }}
+              text={t('user_voted_csv')}
+              startIcon={<DescriptionIcon />}
+            />
+          </CSVLink>
+
           <Button
-            variant="contained"
             onClick={() => onBack()}
             color="secondary"
-          >
-            {t('back')}
-          </Button>
+            text={t('back')}
+            startIcon={<ArrowBackIcon />}
+          />
         </Grid>
       </Paper>
     );

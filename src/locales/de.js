@@ -25,6 +25,7 @@ const de = {
     waiting_sharing: 'Warten auf Umfragen sharing ...',
     vote: 'Abstimmung',
     votes: 'Stimmen',
+    user_voted_csv: 'CSV-Export',
     primary_title: 'Umfragen 20scoops',
     secondary_title: '@OKRs'
   }

@@ -11,5 +11,5 @@ export default (poll, list) => {
     result.push({ label, count, percentage: count / total });
   });
 
-  return { title: poll.title, result, total };
+  return { title: poll.title, group: poll.group, result, total };
 };
