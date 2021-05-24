@@ -27,7 +27,8 @@ const en = {
     votes: 'votes',
     user_voted_csv: 'CSV Export',
     primary_title: 'Polls 20scoops',
-    secondary_title: '@OKRs'
+    secondary_title: '@OKRs',
+    group_name: 'Group Name'
   }
 };
 

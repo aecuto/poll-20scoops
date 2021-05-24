@@ -10,6 +10,9 @@ export const VOTE_LIST = 'VOTE_LIST';
 export const VOTE_ANSWER = 'VOTE_ANSWER';
 export const VOTE_RESULT = 'VOTE_RESULT';
 
+export const GROUP_LIST = 'GROUP_LIST';
+export const GROUP_SAVE = 'GROUP_SAVE';
+
 const routeUrlProvider = createRouteUrlProvider();
 
 routeUrlProvider.set(SIGN_IN, '/');
@@ -21,5 +24,8 @@ routeUrlProvider.set(POLL_SAVE, '/poll/:pollId');
 routeUrlProvider.set(VOTE_LIST, '/votes');
 routeUrlProvider.set(VOTE_ANSWER, '/votes/:pollId');
 routeUrlProvider.set(VOTE_RESULT, '/votes/:pollId/result');
+
+routeUrlProvider.set(GROUP_LIST, '/groups');
+routeUrlProvider.set(GROUP_SAVE, '/groups/:groupId');
 
 export default routeUrlProvider;

@@ -18,23 +18,16 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import SearchIcon from '@material-ui/icons/Search';
 
 import routeUrlProvider, {
-  POLL_LIST,
-  POLL_SAVE,
-  VOTE_RESULT
+  GROUP_LIST,
+  GROUP_SAVE
 } from 'constants/route-paths';
-import { reqList, reqGet, reqCreate } from 'services/poll';
-import { reqShare } from 'services/share-poll';
+import { reqList } from 'services/group';
 
 import Snackbar from 'components/Snackbar';
-import Button from 'components/Button';
-import { omit } from 'lodash';
 import { useContextAuthManager } from 'components/Auth/AuthManager';
 
 import PermissionDeny from 'components/PermissionDeny';
 
-import FileCopyIcon from '@material-ui/icons/FileCopy';
-import EmojiEventsRoundedIcon from '@material-ui/icons/EmojiEventsRounded';
-import ShareIcon from '@material-ui/icons/Share';
 import { useTranslation } from 'react-i18next';
 
 const Paper = styled(MuiPaper)`
@@ -55,50 +48,24 @@ const Component = ({ history }) => {
   const { isAdmin } = useContextAuthManager();
 
   const [list, setList] = useState([]);
-  const [message, setMessage] = useState({});
   const [search, setSearch] = useState('');
-  const [lastChange, setLastChange] = useState(Date.now());
 
   useEffect(() => {
     reqList().then(list => setList(list));
-  }, [lastChange]);
+  }, []);
 
   const debounced = useDebouncedCallback(value => {
     setSearch(value);
   }, 300);
 
   const onCreate = () => {
-    history.push(routeUrlProvider.getForLink(POLL_SAVE, { pollId: 'create' }));
-  };
-
-  const onUpdate = pollId => {
-    history.push(routeUrlProvider.getForLink(POLL_SAVE, { pollId }));
-  };
-
-  const onResult = pollId => {
-    history.push(routeUrlProvider.getForLink(VOTE_RESULT, { pollId }));
-  };
-
-  const onShare = data => {
-    reqShare(data.title, data.id).then(() =>
-      setMessage({
-        text: `${data.title} ${t('shared')}`,
-        lastUpdated: Date.now()
-      })
+    history.push(
+      routeUrlProvider.getForLink(GROUP_SAVE, { groupId: 'create' })
     );
   };
 
-  const onDuplicate = pollId => {
-    reqGet(pollId).then(data => {
-      const newData = {
-        ...omit(data, 'id'),
-        title: `${data.title} (duplicate)`
-      };
-      reqCreate(newData).then(() => {
-        setMessage({ text: t('duplicate_success'), lastUpdated: Date.now() });
-        setLastChange(Date.now());
-      });
-    });
+  const onUpdate = groupId => {
+    history.push(routeUrlProvider.getForLink(GROUP_SAVE, { groupId }));
   };
 
   if (!isAdmin) {
@@ -106,9 +73,7 @@ const Component = ({ history }) => {
   }
 
   return (
-    <Layout menu={POLL_LIST}>
-      <Snackbar message={message} severity="success" autoHideDuration={5000} />
-
+    <Layout menu={GROUP_LIST}>
       <Grid container>
         <Grid item xs={12} md={8}>
           <Typography variant="h3">{t('list_title')}</Typography>
@@ -137,43 +102,14 @@ const Component = ({ history }) => {
 
       <Grid container spacing={3}>
         {list
-          .filter(data => data.title.includes(search))
+          .filter(data => data.name.includes(search))
           .map((data, index) => (
             <Grid item xs={12} key={data.id}>
               <Paper onClick={() => onUpdate(data.id)}>
                 <Grid container spacing={3}>
-                  <Typography variant="h3">
-                    {`#${index + 1}. `} {data.title}
+                  <Typography variant="h5">
+                    {t('group_name')}: <strong>{data.name}</strong>
                   </Typography>
-
-                  <Grid item xs={12} style={{ textAlign: 'right' }}>
-                    <Button
-                      color="primary"
-                      onClick={event => {
-                        event.stopPropagation();
-                        onDuplicate(data.id);
-                      }}
-                      startIcon={<FileCopyIcon />}
-                      text={t('duplicate')}
-                    />
-                    <Button
-                      onClick={event => {
-                        event.stopPropagation();
-                        onResult(data.id);
-                      }}
-                      startIcon={<EmojiEventsRoundedIcon />}
-                      text={t('result')}
-                    />
-                    <Button
-                      color="secondary"
-                      onClick={event => {
-                        event.stopPropagation();
-                        onShare(data);
-                      }}
-                      startIcon={<ShareIcon />}
-                      text={t('share')}
-                    />
-                  </Grid>
                 </Grid>
               </Paper>
             </Grid>

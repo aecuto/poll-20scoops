@@ -9,7 +9,11 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 
-import routeUrlProvider, { VOTE_LIST, POLL_LIST } from 'constants/route-paths';
+import routeUrlProvider, {
+  VOTE_LIST,
+  POLL_LIST,
+  GROUP_LIST
+} from 'constants/route-paths';
 
 import { useContextAuthManager } from 'components/Auth/AuthManager';
 
@@ -24,6 +28,33 @@ const Component = ({ history, menu }) => {
     return menu === path;
   };
 
+  const adminMenu = () => {
+    return (
+      <>
+        <ListItem
+          button
+          onClick={() => menuLink(POLL_LIST)}
+          selected={activeMenu(POLL_LIST)}
+        >
+          <ListItemIcon>
+            <DashboardIcon />
+          </ListItemIcon>
+          <ListItemText primary="Poll List" />
+        </ListItem>
+        <ListItem
+          button
+          onClick={() => menuLink(GROUP_LIST)}
+          selected={activeMenu(GROUP_LIST)}
+        >
+          <ListItemIcon>
+            <DashboardIcon />
+          </ListItemIcon>
+          <ListItemText primary="Group List" />
+        </ListItem>
+      </>
+    );
+  };
+
   return (
     <List>
       <ListItem
@@ -36,18 +67,7 @@ const Component = ({ history, menu }) => {
         </ListItemIcon>
         <ListItemText primary="Vote Polls" />
       </ListItem>
-      {isAdmin && (
-        <ListItem
-          button
-          onClick={() => menuLink(POLL_LIST)}
-          selected={activeMenu(POLL_LIST)}
-        >
-          <ListItemIcon>
-            <DashboardIcon />
-          </ListItemIcon>
-          <ListItemText primary="Poll List" />
-        </ListItem>
-      )}
+      {isAdmin && adminMenu()}
     </List>
   );
 };

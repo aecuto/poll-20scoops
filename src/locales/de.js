@@ -9,12 +9,12 @@ const de = {
     sign_with_20scoops: 'Bitte melden Sie sich mit @ 20scoops',
     timeout: 'Sorry, Ihre Anmelde-Zeitüberschreitung. Bitte neu anmelden.',
     project_title: 'Poll 20scoops',
-    sing_in_title: 'Anmelden',
+    sing_in_title: 'Einloggen',
     sing_in_button: 'Google Anmelden',
-    list_title: 'Liste',
+    list_title: 'Aufführen',
     search: 'Suche',
     duplicate: 'Duplikat',
-    share: 'Aktie',
+    share: 'Teilen',
     create: 'Erstellen',
     edit: 'Bearbeitung',
     title: 'Titel',
@@ -27,7 +27,8 @@ const de = {
     votes: 'Stimmen',
     user_voted_csv: 'CSV-Export',
     primary_title: 'Umfragen 20scoops',
-    secondary_title: '@OKRs'
+    secondary_title: '@OKRs',
+    group_name: 'Gruppenname'
   }
 };
 

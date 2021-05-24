@@ -7,7 +7,9 @@ import routeUrlProvider, {
   POLL_SAVE,
   VOTE_LIST,
   VOTE_ANSWER,
-  VOTE_RESULT
+  VOTE_RESULT,
+  GROUP_LIST,
+  GROUP_SAVE
 } from 'constants/route-paths';
 
 import PublicRoute from 'components/Auth/PublicRoute';
@@ -22,6 +24,26 @@ import PollSave from './pages/Poll/Save';
 import VoteList from './pages/Vote/List';
 import VoteAnswer from './pages/Vote/Answer';
 import VoteResult from './pages/Vote/Result';
+
+import GroupList from './pages/Group/List';
+import GroupSave from './pages/Group/Save';
+
+const groupRoute = () => {
+  return (
+    <>
+      <PrivateRoute
+        exact
+        path={routeUrlProvider.getForRoute(GROUP_LIST)}
+        component={GroupList}
+      />
+      <PrivateRoute
+        exact
+        path={routeUrlProvider.getForRoute(GROUP_SAVE)}
+        component={GroupSave}
+      />
+    </>
+  );
+};
 
 const pollRoute = () => {
   return (
@@ -78,6 +100,7 @@ const Router = () => {
 
       {pollRoute()}
       {voteRoute()}
+      {groupRoute()}
     </div>
   );
 };
