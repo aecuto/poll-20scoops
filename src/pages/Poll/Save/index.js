@@ -20,9 +20,11 @@ import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
 
 import TextField from 'components/FinalForm/TextField';
+import Select from 'components/FinalForm/Select';
 import Snackbar from 'components/Snackbar';
 
 import { reqCreate, reqGet, reqDelete, reqUpdate } from 'services/poll';
+import { reqList } from 'services/group';
 import routeUrlProvider, { POLL_LIST, POLL_SAVE } from 'constants/route-paths';
 import { compact, filter, isEmpty } from 'lodash';
 import { required } from 'utils/form/validators';
@@ -55,8 +57,12 @@ const Component = ({ match, history }) => {
 
   const [data, setData] = useState({});
   const [message, setMessage] = useState({});
+  const [group, setGroup] = useState([]);
+
+  console.log(group);
 
   useEffect(() => {
+    reqList().then(data => setGroup(data));
     if (!isCreate) {
       reqGet(pollId).then(data => setData(data));
     }
@@ -150,9 +156,10 @@ const Component = ({ match, history }) => {
                   <Grid item xs={12}>
                     <Field
                       name="group"
-                      label={t('group')}
-                      component={TextField}
-                      validate={required(t('group'))}
+                      label={t('choose_group')}
+                      list={group}
+                      component={Select}
+                      validate={required(t('choose_group'))}
                     />
                   </Grid>
                 </Grid>

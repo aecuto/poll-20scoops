@@ -18,7 +18,7 @@ const en = {
     create: 'Create',
     edit: 'Editing',
     title: 'Title',
-    group: 'Group (ex. okrs-q4-2020)',
+    choose_group: 'Choose Group',
     answer_options: 'Answer Options',
     answer: 'Answer',
     submit: 'Submit',

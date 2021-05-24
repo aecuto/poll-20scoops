@@ -18,7 +18,7 @@ const de = {
     create: 'Erstellen',
     edit: 'Bearbeitung',
     title: 'Titel',
-    group: 'Gruppe (ex. Okrs-q4-2020)',
+    choose_group: 'wählen Sie Gruppe',
     answer_options: 'Antwortoptionen',
     answer: 'Antworten',
     submit: 'einreichen',
