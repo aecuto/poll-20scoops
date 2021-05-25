@@ -23,7 +23,6 @@ import routeUrlProvider, {
 } from 'constants/route-paths';
 import { reqList } from 'services/group';
 
-import Snackbar from 'components/Snackbar';
 import { useContextAuthManager } from 'components/Auth/AuthManager';
 
 import PermissionDeny from 'components/PermissionDeny';

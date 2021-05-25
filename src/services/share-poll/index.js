@@ -11,3 +11,7 @@ export const reqShare = async (title, pollId, group) => {
   };
   return db.add(data);
 };
+
+export const reqDelete = shareId => {
+  return db.doc(shareId).delete();
+};

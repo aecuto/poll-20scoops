@@ -20,10 +20,7 @@ import TextField from 'components/FinalForm/TextField';
 import Snackbar from 'components/Snackbar';
 
 import { reqCreate, reqGet, reqDelete, reqUpdate } from 'services/group';
-import routeUrlProvider, {
-  GROUP_LIST,
-  GROUP_SAVE
-} from 'constants/route-paths';
+import routeUrlProvider, { GROUP_LIST } from 'constants/route-paths';
 
 import { required } from 'utils/form/validators';
 import { useTranslation } from 'react-i18next';

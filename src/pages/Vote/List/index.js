@@ -6,7 +6,7 @@ import Layout from 'components/Layout';
 import Divider from 'components/Divider';
 import GroupFilter from 'components/GroupFilter';
 
-import { db } from 'services/share-poll';
+import { db, reqDelete } from 'services/share-poll';
 import routeUrlProvider, {
   VOTE_ANSWER,
   VOTE_LIST
@@ -21,6 +21,10 @@ import TimeAgo from 'react-timeago';
 import AccessAlarmRoundedIcon from '@material-ui/icons/AccessAlarmRounded';
 import { useTranslation } from 'react-i18next';
 
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { useContextAuthManager } from 'components/Auth/AuthManager';
+
 const Paper = styled(MuiPaper)`
   && {
     padding: 20px;
@@ -30,38 +34,51 @@ const Paper = styled(MuiPaper)`
 
 const Component = ({ history }) => {
   const { t } = useTranslation();
+  const { isAdmin } = useContextAuthManager();
+
   const [list, setList] = useState([]);
   const [groupFilter, setGroupFilter] = useState('');
-  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
-    setShowAll(false);
     if (groupFilter) {
-      db.orderBy('created_at', 'desc')
-        .limit(5)
-        .onSnapshot(querySnapshot => {
-          const list = [];
-          querySnapshot.forEach(doc => {
-            list.push(doc.data());
-          });
-          setList(list.filter(item => item.group === groupFilter));
-        });
+      fetchList(5);
     }
   }, [groupFilter]);
+
+  const fetchList = (limit = 0) => {
+    const query = db
+      .where('group', '==', groupFilter)
+      .orderBy('created_at', 'desc');
+
+    if (limit) {
+      query.limit(limit).onSnapshot(querySnapshot => {
+        const list = [];
+        querySnapshot.forEach(doc => {
+          list.push({ id: doc.id, ...doc.data() });
+        });
+        setList(list);
+      });
+    } else {
+      query.onSnapshot(querySnapshot => {
+        const list = [];
+        querySnapshot.forEach(doc => {
+          list.push({ id: doc.id, ...doc.data() });
+        });
+        setList(list);
+      });
+    }
+  };
 
   const onClick = pollId => {
     history.push(routeUrlProvider.getForLink(VOTE_ANSWER, { pollId }));
   };
 
   const onShowAll = () => {
-    db.orderBy('created_at', 'desc').onSnapshot(querySnapshot => {
-      const list = [];
-      querySnapshot.forEach(doc => {
-        list.push(doc.data());
-      });
-      setList(list.filter(item => item.group === groupFilter));
-      setShowAll(true);
-    });
+    fetchList();
+  };
+
+  const onDelete = shareId => {
+    reqDelete(shareId);
   };
 
   const renderEmpty = () => {
@@ -108,10 +125,22 @@ const Component = ({ history }) => {
                 label={<TimeAgo date={data.created_at.toDate()} />}
                 color={!index ? 'secondary' : 'default'}
               />
+
+              {isAdmin ? (
+                <IconButton
+                  color="secondary"
+                  onClick={event => {
+                    event.stopPropagation();
+                    onDelete(data.id);
+                  }}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              ) : null}
             </Paper>
           </Grid>
         ))}
-        {list.length && !showAll ? (
+        {list.length === 5 ? (
           <Grid item xs={12} style={{ textAlign: 'center' }}>
             <Button variant="outlined" onClick={() => onShowAll()}>
               {t('show_all')}
