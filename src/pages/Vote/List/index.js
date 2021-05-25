@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import Layout from 'components/Layout';
+import Divider from 'components/Divider';
+import GroupFilter from 'components/GroupFilter';
 
 import { db } from 'services/share-poll';
 import routeUrlProvider, {
@@ -28,6 +30,7 @@ const Paper = styled(MuiPaper)`
 const Component = ({ history }) => {
   const { t } = useTranslation();
   const [list, setList] = useState([]);
+  const [gropFilter, setGroupFilter] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -39,10 +42,10 @@ const Component = ({ history }) => {
         querySnapshot.forEach(doc => {
           list.push(doc.data());
         });
-        setList(list);
+        setList(list.filter(item => item.group === gropFilter));
         setIsLoading(false);
       });
-  }, []);
+  }, [gropFilter]);
 
   const onClick = pollId => {
     history.push(routeUrlProvider.getForLink(VOTE_ANSWER, { pollId }));
@@ -67,8 +70,8 @@ const Component = ({ history }) => {
     );
   };
 
-  return (
-    <Layout menu={VOTE_LIST}>
+  const renderVoting = () => {
+    return (
       <Grid container spacing={3}>
         {isLoading ? null : renderEmpty()}
         {list.map((data, index) => (
@@ -90,6 +93,18 @@ const Component = ({ history }) => {
           </Grid>
         ))}
       </Grid>
+    );
+  };
+
+  return (
+    <Layout menu={VOTE_LIST}>
+      <Grid container>
+        <GroupFilter onSelect={setGroupFilter} />
+      </Grid>
+
+      <Divider />
+
+      {gropFilter ? renderVoting() : null}
     </Layout>
   );
 };

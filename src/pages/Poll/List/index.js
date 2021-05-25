@@ -31,6 +31,7 @@ import { omit } from 'lodash';
 import { useContextAuthManager } from 'components/Auth/AuthManager';
 
 import PermissionDeny from 'components/PermissionDeny';
+import GroupFilter from 'components/GroupFilter';
 
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import EmojiEventsRoundedIcon from '@material-ui/icons/EmojiEventsRounded';
@@ -58,6 +59,7 @@ const Component = ({ history }) => {
   const [message, setMessage] = useState({});
   const [search, setSearch] = useState('');
   const [lastChange, setLastChange] = useState(Date.now());
+  const [groupFilter, setGroupFilter] = useState('');
 
   useEffect(() => {
     reqList().then(list => setList(list));
@@ -80,7 +82,7 @@ const Component = ({ history }) => {
   };
 
   const onShare = data => {
-    reqShare(data.title, data.id).then(() =>
+    reqShare(data.title, data.id, data.group).then(() =>
       setMessage({
         text: `${data.title} ${t('shared')}`,
         lastUpdated: Date.now()
@@ -111,7 +113,7 @@ const Component = ({ history }) => {
 
       <Grid container>
         <Grid item xs={12} md={8}>
-          <Typography variant="h3">{t('list_title')}</Typography>
+          <GroupFilter onSelect={setGroupFilter} />
         </Grid>
         <Grid item xs={11} md={3}>
           <FormControl fullWidth>
@@ -137,7 +139,9 @@ const Component = ({ history }) => {
 
       <Grid container spacing={3}>
         {list
-          .filter(data => data.title.includes(search))
+          .filter(
+            data => data.title.includes(search) && data.group === groupFilter
+          )
           .map((data, index) => (
             <Grid item xs={12} key={data.id}>
               <Paper onClick={() => onUpdate(data.id)}>

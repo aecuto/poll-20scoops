@@ -59,8 +59,6 @@ const Component = ({ match, history }) => {
   const [message, setMessage] = useState({});
   const [group, setGroup] = useState([]);
 
-  console.log(group);
-
   useEffect(() => {
     reqList().then(data => setGroup(data));
     if (!isCreate) {
