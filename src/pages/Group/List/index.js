@@ -108,7 +108,7 @@ const Component = ({ history }) => {
               <Paper onClick={() => onUpdate(data.id)}>
                 <Grid container spacing={3}>
                   <Typography variant="h5">
-                    {t('group_name')}: <strong>{data.name}</strong>
+                    {index + 1}. <strong>{data.name}</strong>
                   </Typography>
                 </Grid>
               </Paper>

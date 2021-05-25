@@ -8,6 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import LayersIcon from '@material-ui/icons/Layers';
 
 import routeUrlProvider, {
   VOTE_LIST,
@@ -47,7 +48,7 @@ const Component = ({ history, menu }) => {
           selected={activeMenu(GROUP_LIST)}
         >
           <ListItemIcon>
-            <DashboardIcon />
+            <LayersIcon />
           </ListItemIcon>
           <ListItemText primary="Group List" />
         </ListItem>

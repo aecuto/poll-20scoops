@@ -24,6 +24,7 @@ const de = {
     submit: 'einreichen',
     waiting_sharing: 'Warten auf Umfragen sharing ...',
     vote: 'Abstimmung',
+    show_all: 'Zeige alles',
     votes: 'Stimmen',
     user_voted_csv: 'CSV-Export',
     primary_title: 'Umfragen 20scoops',

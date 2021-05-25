@@ -14,6 +14,7 @@ import routeUrlProvider, {
 
 import MuiPaper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
 import TimeAgo from 'react-timeago';
@@ -31,8 +32,10 @@ const Component = ({ history }) => {
   const { t } = useTranslation();
   const [list, setList] = useState([]);
   const [groupFilter, setGroupFilter] = useState('');
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
+    setShowAll(false);
     if (groupFilter) {
       db.orderBy('created_at', 'desc')
         .limit(5)
@@ -48,6 +51,17 @@ const Component = ({ history }) => {
 
   const onClick = pollId => {
     history.push(routeUrlProvider.getForLink(VOTE_ANSWER, { pollId }));
+  };
+
+  const onShowAll = () => {
+    db.orderBy('created_at', 'desc').onSnapshot(querySnapshot => {
+      const list = [];
+      querySnapshot.forEach(doc => {
+        list.push(doc.data());
+      });
+      setList(list.filter(item => item.group === groupFilter));
+      setShowAll(true);
+    });
   };
 
   const renderEmpty = () => {
@@ -97,6 +111,13 @@ const Component = ({ history }) => {
             </Paper>
           </Grid>
         ))}
+        {list.length && !showAll ? (
+          <Grid item xs={12} style={{ textAlign: 'center' }}>
+            <Button variant="outlined" onClick={() => onShowAll()}>
+              {t('show_all')}
+            </Button>
+          </Grid>
+        ) : null}
       </Grid>
     </Layout>
   );

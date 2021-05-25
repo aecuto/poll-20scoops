@@ -23,7 +23,7 @@ const Component = ({ input, list, label, meta }) => {
       error={error}
     >
       <Select {...input} onChange={handleChange} displayEmpty>
-        <MenuItem value="">
+        <MenuItem value="" disabled>
           <Typography noWrap>{label}</Typography>
         </MenuItem>
         {list.map(item => (

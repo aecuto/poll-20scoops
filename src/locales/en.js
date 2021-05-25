@@ -24,6 +24,7 @@ const en = {
     submit: 'Submit',
     waiting_sharing: 'Waiting for polls sharing...',
     vote: 'Vote',
+    show_all: 'Show All',
     votes: 'votes',
     user_voted_csv: 'CSV Export',
     primary_title: 'Polls 20scoops',
