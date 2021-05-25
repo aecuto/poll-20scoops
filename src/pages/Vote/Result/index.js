@@ -19,6 +19,7 @@ import { getList } from 'services/user';
 import { CSVLink } from 'react-csv';
 import DescriptionIcon from '@material-ui/icons/Description';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { useContextAuthManager } from 'components/Auth/AuthManager';
 
 const Space = styled.div`
   margin-bottom: 20px;
@@ -26,6 +27,7 @@ const Space = styled.div`
 
 const Component = ({ match, history }) => {
   const { t } = useTranslation();
+  const { isAdmin } = useContextAuthManager();
 
   const { pollId } = match.params;
   const [data, setData] = useState({});
@@ -102,18 +104,20 @@ const Component = ({ match, history }) => {
         <Space />
 
         <Grid container justify="center">
-          <CSVLink
-            data={csvData().data}
-            headers={csvData().headers}
-            filename={`${data.title}-${data.group}.csv`}
-            style={{ textDecoration: 'none' }}
-          >
-            <Button
-              style={{ marginRight: '10px', marginButtom: '10px' }}
-              text={t('user_voted_csv')}
-              startIcon={<DescriptionIcon />}
-            />
-          </CSVLink>
+          {isAdmin && (
+            <CSVLink
+              data={csvData().data}
+              headers={csvData().headers}
+              filename={`${data.title}-${data.group}.csv`}
+              style={{ textDecoration: 'none' }}
+            >
+              <Button
+                style={{ marginRight: '10px', marginButtom: '10px' }}
+                text={t('user_voted_csv')}
+                startIcon={<DescriptionIcon />}
+              />
+            </CSVLink>
+          )}
 
           <Button
             onClick={() => onBack()}

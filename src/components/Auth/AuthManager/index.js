@@ -27,7 +27,7 @@ const AuthManager = ({ children, history }) => {
     if (token) {
       setIsLoading(true);
       firebase.auth().onAuthStateChanged(user => {
-        if (user) {
+        if (user && check20scoopsUser(user)) {
           presence(user);
           getUserInfo(user.uid);
 

@@ -17,37 +17,48 @@ const Paper = styled(MuiPaper)`
   }
 `;
 
+const Wrapper = styled.div`
+  height: 100vh;
+  background: linear-gradient(
+    135deg,
+    rgb(96, 108, 136) 0%,
+    rgb(63, 76, 107) 100%
+  );
+`;
+
 const View = ({ googleSignIn }) => {
   const { t } = useTranslation();
   return (
-    <Container>
-      <Grid
-        container
-        justify="center"
-        alignItems="center"
-        style={{ minHeight: '80vh' }}
-      >
-        <Grid item lg={6} xs={10}>
-          <Typography variant="h3" align="center" paragraph gutterBottom>
-            {t('project_title')}
-          </Typography>
-          <Paper>
-            <Typography variant="h4" align="center" paragraph>
-              {t('sing_in_title')}
+    <Wrapper>
+      <Container>
+        <Grid
+          container
+          justify="center"
+          alignItems="center"
+          style={{ minHeight: '80vh' }}
+        >
+          <Grid item lg={6} xs={10}>
+            <Typography variant="h3" align="center" paragraph gutterBottom>
+              {t('project_title')}
             </Typography>
-            <Button
-              variant="outlined"
-              color="primary"
-              fullWidth
-              onClick={googleSignIn}
-              startIcon={<GoogleIcon />}
-            >
-              {t('sing_in_button')}
-            </Button>
-          </Paper>
+            <Paper>
+              <Typography variant="h4" align="center" paragraph>
+                {t('sing_in_title')}
+              </Typography>
+              <Button
+                variant="outlined"
+                color="primary"
+                fullWidth
+                onClick={googleSignIn}
+                startIcon={<GoogleIcon />}
+              >
+                {t('sing_in_button')}
+              </Button>
+            </Paper>
+          </Grid>
         </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </Wrapper>
   );
 };
 
