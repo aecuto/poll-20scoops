@@ -4,13 +4,24 @@ import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
+import MuiListItemText from '@material-ui/core/ListItemText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 
 import firebase from 'services/firebase';
+import { filter, orderBy } from 'lodash';
+import styled from 'styled-components';
+
+const ListItemText = styled(MuiListItemText)`
+  && {
+    p {
+      color: ${({ secondary }) =>
+        secondary === 'online' ? 'lawngreen' : 'red'};
+    }
+  }
+`;
 
 const UsersState = () => {
   const [users, setUsers] = useState([]);
@@ -46,12 +57,13 @@ const UsersState = () => {
     setOpen(false);
   };
 
-  const filterUsers = users.filter(user => user.state === 'online').reverse();
+  const filterUsers = filter(users, { state: 'online' });
+  const orderUser = orderBy(users, 'state', 'desc');
 
   return (
     <>
       <Button onClick={handleClickOpen}>
-        <AvatarGroup>
+        <AvatarGroup max={3}>
           {filterUsers.map((user, index) => (
             <Avatar key={index} alt={user.displayName} src={user.photoURL} />
           ))}
@@ -60,7 +72,7 @@ const UsersState = () => {
       <Dialog onClose={handleClose} open={open}>
         <DialogTitle>20scoops Users</DialogTitle>
         <List>
-          {users.map((user, index) => (
+          {orderUser.map((user, index) => (
             <ListItem key={index}>
               <ListItemAvatar>
                 <Avatar
