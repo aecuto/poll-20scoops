@@ -62,8 +62,10 @@ const Component = ({ history }) => {
   const [groupFilter, setGroupFilter] = useState('');
 
   useEffect(() => {
-    reqList().then(list => setList(list));
-  }, [lastChange]);
+    if (groupFilter) {
+      reqList(groupFilter).then(list => setList(list));
+    }
+  }, [lastChange, groupFilter]);
 
   const debounced = useDebouncedCallback(value => {
     setSearch(value);
@@ -139,9 +141,7 @@ const Component = ({ history }) => {
 
       <Grid container spacing={3}>
         {list
-          .filter(
-            data => data.title.includes(search) && data.group === groupFilter
-          )
+          .filter(data => data.title.includes(search))
           .map((data, index) => (
             <Grid item xs={12} key={data.id}>
               <Paper onClick={() => onUpdate(data.id)}>

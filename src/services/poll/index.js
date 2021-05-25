@@ -18,8 +18,9 @@ export const reqUpdate = (id, values) => {
   return db.doc(id).update(data);
 };
 
-export const reqList = () => {
+export const reqList = groupFilter => {
   return db
+    .where('group', '==', groupFilter)
     .orderBy('created_at', 'desc')
     .get()
     .then(querySnapshot => {
