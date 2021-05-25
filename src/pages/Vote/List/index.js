@@ -30,22 +30,21 @@ const Paper = styled(MuiPaper)`
 const Component = ({ history }) => {
   const { t } = useTranslation();
   const [list, setList] = useState([]);
-  const [gropFilter, setGroupFilter] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [groupFilter, setGroupFilter] = useState('');
 
   useEffect(() => {
-    setIsLoading(true);
-    db.orderBy('created_at', 'desc')
-      .limit(5)
-      .onSnapshot(querySnapshot => {
-        const list = [];
-        querySnapshot.forEach(doc => {
-          list.push(doc.data());
+    if (groupFilter) {
+      db.orderBy('created_at', 'desc')
+        .limit(5)
+        .onSnapshot(querySnapshot => {
+          const list = [];
+          querySnapshot.forEach(doc => {
+            list.push(doc.data());
+          });
+          setList(list.filter(item => item.group === groupFilter));
         });
-        setList(list.filter(item => item.group === gropFilter));
-        setIsLoading(false);
-      });
-  }, [gropFilter]);
+    }
+  }, [groupFilter]);
 
   const onClick = pollId => {
     history.push(routeUrlProvider.getForLink(VOTE_ANSWER, { pollId }));
@@ -70,10 +69,16 @@ const Component = ({ history }) => {
     );
   };
 
-  const renderVoting = () => {
-    return (
+  return (
+    <Layout menu={VOTE_LIST}>
+      <Grid container>
+        <GroupFilter onSelect={setGroupFilter} />
+      </Grid>
+
+      <Divider />
+
       <Grid container spacing={3}>
-        {isLoading ? null : renderEmpty()}
+        {!groupFilter ? null : renderEmpty()}
         {list.map((data, index) => (
           <Grid item xs={12} key={index}>
             <Paper
@@ -93,18 +98,6 @@ const Component = ({ history }) => {
           </Grid>
         ))}
       </Grid>
-    );
-  };
-
-  return (
-    <Layout menu={VOTE_LIST}>
-      <Grid container>
-        <GroupFilter onSelect={setGroupFilter} />
-      </Grid>
-
-      <Divider />
-
-      {gropFilter ? renderVoting() : null}
     </Layout>
   );
 };
