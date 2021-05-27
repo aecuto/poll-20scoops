@@ -9,8 +9,6 @@ const en = {
     sign_with_20scoops: 'Please sign in with @20scoops',
     timeout: 'Sorry, your sign-in timed out. Please sign in again.',
     project_title: 'Poll 20scoops',
-    sing_in_title: 'Sign In',
-    sing_in_button: 'Google Sign In',
     list_title: 'List',
     search: 'Search',
     duplicate: 'Duplicate',

@@ -9,8 +9,6 @@ const de = {
     sign_with_20scoops: 'Bitte melden Sie sich mit @ 20scoops',
     timeout: 'Sorry, Ihre Anmelde-Zeitüberschreitung. Bitte neu anmelden.',
     project_title: 'Poll 20scoops',
-    sing_in_title: 'Einloggen',
-    sing_in_button: 'Google Anmelden',
     list_title: 'Aufführen',
     search: 'Suche',
     duplicate: 'Duplikat',
